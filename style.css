@@ -67,6 +67,8 @@
   --c-pink: #c7335d;          /* highlight for the first C of the first word in each group */
   --c-orange: #e79841;        /* highlight for the second word */
   --c-blue: #53a7dd;          /* highlight for the third word */
+
+  --footer-bg: #0C556B;       /* background of the main part of the footer (the bottom strip keeps --bg) */
 }
 
 
@@ -519,25 +521,67 @@ main section {
    6. FOOTER
    ========================================================================== */
 
-.site-footer { border-top: 1px solid var(--line); padding: 40px 16px 24px; }
+/* The footer has two stacked parts (see index.html): ".footer-main", the
+   lighter teal area with the logo, menu and contact details, and
+   ".footer-bottom", the thin strip with the copyright line. The footer itself
+   has no background, so the bottom strip simply shows the normal page colour
+   (var(--bg)), the same as before. Only the main part gets the new colour. */
 
-.footer-grid {
-  max-width: var(--max);
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;   /* three equal columns: brand, contact details, address */
-  gap: 24px;
+.footer-main {
+  background: var(--footer-bg);   /* the lighter teal defined at the top of the file */
+  color: var(--text);             /* off-white text: the old grey-blue was too faint on this background */
+  padding: 48px 16px;
 }
 
-.footer-brand .logo { height: 110px; }   /* smaller than the header logo, but still prominent. Width stays "auto" from the rule above, so only the height is given */
-.site-footer h3 { font-size: 1rem; }
-.site-footer p { margin: .3em 0; color: var(--muted); }
+.footer-grid {
+  max-width: var(--max);       /* keep the content inside the same 1200px column as the rest of the page, even though the coloured band spans the full width */
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;   /* three equal columns: logo, menu, contact information */
+  gap: 32px;
+  align-items: start;          /* line the tops of the three columns up, instead of stretching them to equal height */
+}
 
-/* Here "!important" does matter. The rule above, ".site-footer p", targets a
-   class plus a tag, so it is MORE specific than ".copyright" alone and would
-   otherwise overwrite this margin-top. "!important" lets this value win. */
-.copyright { text-align: center; margin-top: 32px !important; }
-.footnote { text-align: center; font-size: .8rem; }
+/* The footer logo's height is worked out by the browser with calc(). It is
+   the average of two numbers: 110px (the footer logo's old size) and the
+   header logo's current height (the same clamp() used for ".logo" above).
+   So it lands exactly halfway between the old size and the header size, and
+   keeps that relationship as the window grows or shrinks. Width stays "auto"
+   from the ".logo" rule, so only the height is given. */
+.footer-brand .logo { height: calc((110px + clamp(120px, 14vw, 170px)) / 2); }
+
+.footer-main h3 { font-size: 1rem; margin: 0 0 .8em; }
+
+/* In the contact column the second heading ("Address") needs some space
+   above it to separate it from the phone and email lines. ":first-child"
+   matches an element that is the first thing inside its parent, so the first
+   heading ("Contact details") is excluded and stays at the top. */
+.footer-contact h3 { margin-top: 1.8em; }
+.footer-contact h3:first-child { margin-top: 0; }
+
+.footer-main p { margin: .3em 0; }
+
+/* <address> is shown in italics by browsers by default. Switch that off so it
+   looks like the other text. */
+.footer-main address { font-style: normal; margin: .3em 0; }
+
+/* The menu list: no bullet points, no indentation, a little space between
+   the items. */
+.footer-menu ul { list-style: none; padding: 0; margin: 0; }
+.footer-menu li { margin: .4em 0; }
+
+/* Menu links are plain until hovered or selected with the keyboard, when they
+   get an underline. The phone and email links keep the browser's default
+   underline, so they clearly look clickable. "text-underline-offset" moves
+   the line slightly away from the letters for readability. */
+.footer-menu a { text-decoration: none; }
+.footer-menu a:hover, .footer-menu a:focus-visible { text-decoration: underline; }
+.footer-main a { text-underline-offset: 3px; }
+
+/* The bottom strip: it keeps the normal page colour. */
+.footer-bottom { padding: 24px 16px; }
+.copyright { text-align: center; margin: 0 0 .4em; color: var(--muted); }
+.footnote { text-align: center; font-size: .8rem; margin: 0; color: var(--muted); }
 
 
 /* ==========================================================================

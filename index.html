@@ -306,33 +306,70 @@
   </main>
 
   <!-- ========================================================================
-       FOOTER: the bottom of the page, with the logo, contact details,
-       address and copyright. <footer> is another semantic tag.
+       FOOTER: the bottom of the page. <footer> is another semantic tag.
+       It has two stacked parts, each in its own <div>, so that each can have
+       its own background colour in style.css:
+         1. footer-main   the lighter teal area: logo, menu, contact details
+         2. footer-bottom the thin strip at the very bottom: copyright line
        ======================================================================== -->
   <footer class="site-footer">
-    <!-- Three columns: brand, contact details and address. -->
-    <div class="footer-grid">
-      <div class="footer-brand">
-        <!-- The same logo image as in the header, shown again. The browser
-             downloads the file only once and reuses it. -->
-        <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
-        <p>Neptune by Castlegale</p>
-      </div>
-      <div>
-        <!-- <h3> is a third-level heading. -->
-        <h3>Contact details</h3>
-        <p>Phone: <!-- TODO --> ...</p>
-        <p>Email: <!-- TODO --> ...</p>
-      </div>
-      <div>
-        <h3>Address</h3>
-        <p><!-- TODO --> ...</p>
+
+    <!-- Part 1: the main footer area. -->
+    <div class="footer-main">
+      <!-- Three columns: logo, menu and contact information. -->
+      <div class="footer-grid">
+
+        <!-- Column 1: just the logo. The same image file as in the header is
+             shown again; the browser downloads it only once and reuses it. -->
+        <div class="footer-brand">
+          <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+        </div>
+
+        <!-- Column 2: the same links as the full-screen menu. <nav> marks a
+             block of navigation links, and aria-label gives it a name that
+             screen readers can announce, to tell it apart from the other
+             menu higher up the page. <h3> is a third-level heading. -->
+        <nav class="footer-menu" aria-label="Footer menu">
+          <h3>Menu</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="why-neptune.html">Why Neptune?</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="about.html">About us</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+        </nav>
+
+        <!-- Column 3: contact details and address, one above the other. -->
+        <div class="footer-contact">
+          <h3>Contact details</h3>
+          <!-- A link whose href starts with "tel:" starts a phone call when
+               tapped on a phone. The number inside the href has no spaces,
+               because the phone reads that part. The text between the tags
+               is what the visitor sees, so it can have spaces and be easier
+               to read. -->
+          <p>Phone: <a href="tel:+353871607970">+353 87 160 7970</a></p>
+          <!-- "mailto:" opens the visitor's email program with a new message
+               addressed to this address. -->
+          <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
+
+          <h3>Address</h3>
+          <!-- <address> is the HTML tag for contact details. A <br> is a line
+               break: it starts a new line without starting a new paragraph. -->
+          <address>
+            Castlegale Environmental Limited<br>
+            Elysium Business Centre, 2nd Floor Breffni Court, Watercourse Road<br>
+            Blackpool, Cork, T23 X02N, Ireland
+          </address>
+        </div>
       </div>
     </div>
 
-    <!-- &copy; displays as the copyright symbol. -->
-    <p class="copyright">&copy; 2026 Neptune by Castlegale</p>
-    <p class="footnote">* 68.4% figure: <!-- TODO: add source / methodology --> reference to follow.</p>
+    <!-- Part 2: the bottom strip. &copy; displays as the copyright symbol. -->
+    <div class="footer-bottom">
+      <p class="copyright">&copy; 2026 Neptune by Castlegale</p>
+      <p class="footnote">* 68.4% figure: <!-- TODO: add source / methodology --> reference to follow.</p>
+    </div>
   </footer>
 
   <!-- Loads and runs script.js. It sits at the very bottom on purpose: the
