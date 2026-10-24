@@ -138,7 +138,10 @@ a { color: inherit; }
 
 /* The logo is a PNG picture (images/logo.png), shown by an <img> tag. */
 .logo {
-  height: 80px;                /* fix the height... */
+  /* clamp(smallest, ideal, largest) again: the height is 14vw (14% of the
+     window width) but never less than 120px or more than 170px, so the logo
+     is large on a desktop and still sensible on a phone. */
+  height: clamp(120px, 14vw, 170px);
   width: auto;                 /* ...and let the width follow automatically, so the picture keeps its true proportions and is not squashed */
   display: block;              /* an <img> is "inline" by default, like a letter in a line of text, which leaves a small gap underneath. "block" removes that gap, so centring is exact */
 }
@@ -459,7 +462,7 @@ main section {
   gap: 24px;
 }
 
-.footer-brand .logo { height: 64px; }   /* a slightly smaller logo than in the header. Width stays "auto" from the rule above, so only the height is given */
+.footer-brand .logo { height: 110px; }   /* smaller than the header logo, but still prominent. Width stays "auto" from the rule above, so only the height is given */
 .site-footer h3 { font-size: 1rem; }
 .site-footer p { margin: .3em 0; color: var(--muted); }
 
