@@ -537,9 +537,12 @@ main section {
   max-width: var(--max);       /* keep the content inside the same 1200px column as the rest of the page, even though the coloured band spans the full width */
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;   /* three equal columns: logo, menu, contact information */
+  /* Four tracks: "auto" for the logo, which takes only as much width as the
+     picture needs, then "1fr 1fr 1fr", three equal columns that share all
+     the remaining space: contact details, menu, address. */
+  grid-template-columns: auto 1fr 1fr 1fr;
   gap: 32px;
-  align-items: start;          /* line the tops of the three columns up, instead of stretching them to equal height */
+  align-items: start;          /* line the tops of the columns up, instead of stretching them to equal height */
 }
 
 /* The footer logo's height is worked out by the browser with calc(). It is
@@ -552,14 +555,12 @@ main section {
 
 .footer-main h3 { font-size: 1rem; margin: 0 0 .8em; }
 
-/* In the contact column the second heading ("Address") needs some space
-   above it to separate it from the phone and email lines. ":first-child"
-   matches an element that is the first thing inside its parent, so the first
-   heading ("Contact details") is excluded and stays at the top. */
-.footer-contact h3 { margin-top: 1.8em; }
-.footer-contact h3:first-child { margin-top: 0; }
-
 .footer-main p { margin: .3em 0; }
+
+/* "overflow-wrap: anywhere" lets a long word, such as the email address,
+   break onto a second line if its column is too narrow, instead of poking
+   out of the column and overlapping its neighbour. */
+.footer-contact, .footer-address { overflow-wrap: anywhere; }
 
 /* <address> is shown in italics by browsers by default. Switch that off so it
    looks like the other text. */

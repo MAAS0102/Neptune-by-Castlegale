@@ -273,12 +273,11 @@
       <div class="cta-box">
         <div>
           <p>Call us now for a free consultation</p>
-          <!-- TODO: put the real number in the href and text -->
           <!-- A link whose href starts with "tel:" tells phones to start a
                call. The number inside it has no spaces, because the
                href is read by the phone, while the text between the tags is
                what the visitor sees. The two can differ. -->
-          <a class="cta-link" href="tel:+353000000000">+353 ...</a>
+          <a class="cta-link" href="tel:+353868200771">+353 86 820 0771</a>
         </div>
 
         <!-- The circled "or" between the two options. -->
@@ -286,7 +285,6 @@
 
         <div>
           <p>Email us now for a free consultation</p>
-          <!-- TODO: put the real address in the href and text -->
           <!-- "mailto:" opens the visitor's email program with a new message
                addressed to this address. -->
           <a class="cta-link" href="mailto:info@castlegale.com">info@castlegale.com</a>
@@ -309,26 +307,43 @@
        FOOTER: the bottom of the page. <footer> is another semantic tag.
        It has two stacked parts, each in its own <div>, so that each can have
        its own background colour in style.css:
-         1. footer-main   the lighter teal area: logo, menu, contact details
+         1. footer-main   the lighter teal area: logo plus three columns
+                          (contact details, menu, address)
          2. footer-bottom the thin strip at the very bottom: copyright line
        ======================================================================== -->
   <footer class="site-footer">
 
     <!-- Part 1: the main footer area. -->
     <div class="footer-main">
-      <!-- Three columns: logo, menu and contact information. -->
+      <!-- A grid with the logo on the far left, followed by three text
+           columns side by side: contact details, menu, address. Putting
+           them side by side, not stacked, keeps the footer short. -->
       <div class="footer-grid">
 
-        <!-- Column 1: just the logo. The same image file as in the header is
-             shown again; the browser downloads it only once and reuses it. -->
+        <!-- The logo, on the far left. The same image file as in the header
+             is shown again; the browser downloads it only once and reuses it. -->
         <div class="footer-brand">
           <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
         </div>
 
-        <!-- Column 2: the same links as the full-screen menu. <nav> marks a
-             block of navigation links, and aria-label gives it a name that
-             screen readers can announce, to tell it apart from the other
-             menu higher up the page. <h3> is a third-level heading. -->
+        <!-- Column 1: contact details. <h3> is a third-level heading. -->
+        <div class="footer-contact">
+          <h3>Contact details</h3>
+          <!-- A link whose href starts with "tel:" starts a phone call when
+               tapped on a phone. The number inside the href has no spaces,
+               because the phone reads that part. The text between the tags
+               is what the visitor sees, so it can have spaces and be easier
+               to read. -->
+          <p>Phone: <a href="tel:+353868200771">+353 86 820 0771</a></p>
+          <!-- "mailto:" opens the visitor's email program with a new message
+               addressed to this address. -->
+          <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
+        </div>
+
+        <!-- Column 2, in the middle: the same links as the full-screen menu.
+             <nav> marks a block of navigation links, and aria-label gives it
+             a name that screen readers can announce, to tell it apart from
+             the other menu higher up the page. -->
         <nav class="footer-menu" aria-label="Footer menu">
           <h3>Menu</h3>
           <ul>
@@ -340,22 +355,11 @@
           </ul>
         </nav>
 
-        <!-- Column 3: contact details and address, one above the other. -->
-        <div class="footer-contact">
-          <h3>Contact details</h3>
-          <!-- A link whose href starts with "tel:" starts a phone call when
-               tapped on a phone. The number inside the href has no spaces,
-               because the phone reads that part. The text between the tags
-               is what the visitor sees, so it can have spaces and be easier
-               to read. -->
-          <p>Phone: <a href="tel:+353871607970">+353 87 160 7970</a></p>
-          <!-- "mailto:" opens the visitor's email program with a new message
-               addressed to this address. -->
-          <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
-
+        <!-- Column 3, on the right: the address. <address> is the HTML tag
+             for contact details. A <br> is a line break: it starts a new
+             line without starting a new paragraph. -->
+        <div class="footer-address">
           <h3>Address</h3>
-          <!-- <address> is the HTML tag for contact details. A <br> is a line
-               break: it starts a new line without starting a new paragraph. -->
           <address>
             Castlegale Environmental Limited<br>
             Elysium Business Centre, 2nd Floor Breffni Court, Watercourse Road<br>
