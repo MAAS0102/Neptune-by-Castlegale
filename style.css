@@ -69,6 +69,14 @@
   --c-blue: #53a7dd;          /* highlight for the third word */
 
   --footer-bg: #0C556B;       /* background of the main part of the footer (the bottom strip keeps --bg) */
+
+  /* The five colours a menu link lights up in when the mouse is over it, in
+     the order the links appear: first link, second link, and so on. */
+  --hover-magenta: #D52863;   /* 1st link: Home */
+  --hover-yellow: #ED9825;    /* 2nd link: Why Neptune? */
+  --hover-blue: #28A7D4;      /* 3rd link: Features */
+  --hover-teal: #1BA59A;      /* 4th link: Our team */
+  --hover-aqua: #48C1B8;      /* 5th link: Contact us */
 }
 
 
@@ -277,6 +285,21 @@ a { color: inherit; }
    own, centred under the header. */
 .value-group { display: block; }
 
+/* The sub heading under the three words: a plain-language description of the
+   product. It is white, a little larger than normal text, and on its own line
+   ("display: block"). The ".values" rule above gave everything inside it the
+   bold Poppins font and teal colour, so this rule switches both back: the
+   normal system font, medium weight, and plain white. */
+.values-sub {
+  display: block;
+  margin-top: .6em;                        /* a little space above, to separate it from the three words */
+  color: #ffffff;                          /* plain white */
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  font-weight: 500;                        /* 400 is normal and 700 is bold, so 500 is in between */
+  font-size: clamp(1rem, 1.9vw, 1.35rem);  /* grows with the window, between 1rem and 1.35rem */
+  line-height: 1.4;
+}
+
 /* The highlighted first letters. Each class only sets a colour. */
 .c-pink { color: var(--c-pink); }
 .c-orange { color: var(--c-orange); }
@@ -321,7 +344,29 @@ a { color: inherit; }
   letter-spacing: .06em;
 }
 
-.menu-overlay a:hover, .menu-overlay a:focus-visible { color: var(--accent); }
+/* Each menu item gets its own hover colour. The ":nth-child(n)" selector
+   matches an element by its position among its brothers and sisters, so
+   "li:nth-child(1)" is the first item in the list, "li:nth-child(2)" the
+   second, and so on. Instead of colouring the link directly, each rule sets a
+   CSS variable called --hover on its list item. Anything inside that item,
+   including the link, can then read the variable with var(--hover).
+
+   The same five rules also apply to the menu in the footer (".footer-menu"),
+   which has its links in the same order. */
+.menu-overlay li:nth-child(1), .footer-menu li:nth-child(1) { --hover: var(--hover-magenta); }
+.menu-overlay li:nth-child(2), .footer-menu li:nth-child(2) { --hover: var(--hover-yellow); }
+.menu-overlay li:nth-child(3), .footer-menu li:nth-child(3) { --hover: var(--hover-blue); }
+.menu-overlay li:nth-child(4), .footer-menu li:nth-child(4) { --hover: var(--hover-teal); }
+.menu-overlay li:nth-child(5), .footer-menu li:nth-child(5) { --hover: var(--hover-aqua); }
+
+/* "transition" makes a change happen gradually. Here the text colour fades
+   over 0.2 seconds instead of switching instantly, so the link seems to
+   light up. */
+.menu-overlay a, .footer-menu a { transition: color .2s ease; }
+
+/* While the mouse is over a link (or the keyboard has selected it), use that
+   item's own colour, taken from its --hover variable. */
+.menu-overlay a:hover, .menu-overlay a:focus-visible { color: var(--hover); }
 
 .menu-close {
   position: absolute;         /* position relative to the nearest positioned ancestor. Here that is the fixed overlay, so these numbers are measured from its corner */
@@ -572,17 +617,21 @@ main section {
 .footer-menu li { margin: .4em 0; }
 
 /* Menu links are plain until hovered or selected with the keyboard, when they
-   get an underline. The phone and email links keep the browser's default
-   underline, so they clearly look clickable. "text-underline-offset" moves
-   the line slightly away from the letters for readability. */
+   light up in their own colour (set by the --hover rules in the full-screen
+   menu section above) and also get an underline. The underline is there
+   because some of the colours, magenta especially, are fairly faint on this
+   lighter teal background, and the underline makes the change obvious
+   whatever colour it is. The phone and email links keep the browser's
+   default underline, so they clearly look clickable. "text-underline-offset"
+   moves the line slightly away from the letters for readability. */
 .footer-menu a { text-decoration: none; }
-.footer-menu a:hover, .footer-menu a:focus-visible { text-decoration: underline; }
+.footer-menu a:hover, .footer-menu a:focus-visible { color: var(--hover); text-decoration: underline; }
 .footer-main a { text-underline-offset: 3px; }
 
 /* The bottom strip: it keeps the normal page colour. */
 .footer-bottom { padding: 24px 16px; }
 .copyright { text-align: center; margin: 0 0 .4em; color: var(--muted); }
-.footnote { text-align: center; font-size: .8rem; margin: 0; color: var(--muted); }
+.footnote { text-align: center; font-size: .625rem; margin: 0; color: var(--muted); }   /* .625rem is 10px, much smaller than the 12.8px it was */
 
 
 /* ==========================================================================
@@ -597,8 +646,12 @@ main section {
 /* A @media block applies its rules only when a condition is true. This one
    respects a setting some people turn on in their device to avoid
    animation, which can cause discomfort. If they have it on, smooth
-   scrolling is switched off. */
-@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+   scrolling is switched off, and so is the colour fade on the menu links,
+   which then change colour instantly instead. */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .menu-overlay a, .footer-menu a { transition: none; }
+}
 
 
 /* ==========================================================================
