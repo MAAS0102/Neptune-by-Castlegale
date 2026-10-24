@@ -187,11 +187,17 @@
          ==================================================================== -->
     <section class="hero">
       <div class="hero-text">
-        <!-- <h2> is a second-level heading. The text "68.4% faster*" is
-             wrapped in a <span> with class="accent" so CSS can colour just
-             that part teal. &amp; displays as "&", which has to be written
-             this way because a bare & has a special meaning in HTML. -->
-        <h2>Built for <span class="accent">68.4% faster*</span> operations &amp; zero-stress EPA compliance</h2>
+        <!-- <h2> is a second-level heading. Two pieces of it are wrapped in a
+             <span> so CSS can colour just that part: "68.4% faster*" has
+             class="accent" (teal) and "EPA compliance" has class="magenta".
+             Both also have the class "keep-together", which tells CSS never
+             to split that phrase across two lines, and so does "zero-stress"
+             (otherwise a narrow phone screen could break it at its hyphen).
+             The <br> after "Built
+             for" is a line break, so those two words sit alone on the first
+             line. &amp; displays as "&", which has to be written this way
+             because a bare & has a special meaning in HTML. -->
+        <h2>Built for<br><span class="accent keep-together">68.4% faster*</span> operations &amp; <span class="keep-together">zero-stress</span> <span class="magenta keep-together">EPA compliance</span></h2>
 
         <!-- <blockquote> marks a quotation. &ldquo; and &rdquo; are the
              curly opening and closing quotation marks. <cite> holds the name
@@ -318,32 +324,39 @@
 
     <!-- Part 1: the main footer area. -->
     <div class="footer-main">
-      <!-- A grid with the logo on the far left, followed by three text
-           columns side by side: contact details, menu, address. Putting
-           them side by side, not stacked, keeps the footer short. -->
+      <!-- A grid of three parts side by side: the left part (logo and
+           contact details), the menu in the middle, and the address on the
+           right. Putting them side by side, not stacked, keeps the footer
+           short. style.css makes the middle part sit exactly in the centre
+           of the page, in line with the NEPTUNE title and the words above. -->
       <div class="footer-grid">
 
-        <!-- The logo, on the far left. The same image file as in the header
-             is shown again; the browser downloads it only once and reuses it. -->
-        <div class="footer-brand">
-          <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+        <!-- The left part. It is a wrapper around two things that sit next
+             to each other: the logo and the contact details. -->
+        <div class="footer-left">
+
+          <!-- The logo. The same image file as in the header is shown again;
+               the browser downloads it only once and reuses it. -->
+          <div class="footer-brand">
+            <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+          </div>
+
+          <!-- Contact details. <h3> is a third-level heading. -->
+          <div class="footer-contact">
+            <h3>Contact details</h3>
+            <!-- A link whose href starts with "tel:" starts a phone call when
+                 tapped on a phone. The number inside the href has no spaces,
+                 because the phone reads that part. The text between the tags
+                 is what the visitor sees, so it can have spaces and be easier
+                 to read. -->
+            <p>Phone: <a href="tel:+353868200771">+353 86 820 0771</a></p>
+            <!-- "mailto:" opens the visitor's email program with a new message
+                 addressed to this address. -->
+            <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
+          </div>
         </div>
 
-        <!-- Column 1: contact details. <h3> is a third-level heading. -->
-        <div class="footer-contact">
-          <h3>Contact details</h3>
-          <!-- A link whose href starts with "tel:" starts a phone call when
-               tapped on a phone. The number inside the href has no spaces,
-               because the phone reads that part. The text between the tags
-               is what the visitor sees, so it can have spaces and be easier
-               to read. -->
-          <p>Phone: <a href="tel:+353868200771">+353 86 820 0771</a></p>
-          <!-- "mailto:" opens the visitor's email program with a new message
-               addressed to this address. -->
-          <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
-        </div>
-
-        <!-- Column 2, in the middle: the same links as the full-screen menu.
+        <!-- The middle part: the same links as the full-screen menu.
              <nav> marks a block of navigation links, and aria-label gives it
              a name that screen readers can announce, to tell it apart from
              the other menu higher up the page. -->
@@ -358,7 +371,7 @@
           </ul>
         </nav>
 
-        <!-- Column 3, on the right: the address. <address> is the HTML tag
+        <!-- The right part: the address. <address> is the HTML tag
              for contact details. A <br> is a line break: it starts a new
              line without starting a new paragraph. -->
         <div class="footer-address">

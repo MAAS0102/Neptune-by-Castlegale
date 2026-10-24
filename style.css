@@ -72,7 +72,8 @@
 
   /* The five colours a menu link lights up in when the mouse is over it, in
      the order the links appear: first link, second link, and so on. */
-  --hover-magenta: #D52863;   /* 1st link: Home */
+  --magenta: #D52863;         /* the brand magenta. Used for "EPA compliance" in the headline, and as the first hover colour below */
+  --hover-magenta: var(--magenta);   /* 1st link: Home. var() reuses the value above, so the two can never differ */
   --hover-yellow: #ED9825;    /* 2nd link: Why Neptune? */
   --hover-blue: #28A7D4;      /* 3rd link: Features */
   --hover-teal: #1BA59A;      /* 4th link: Our team */
@@ -149,6 +150,15 @@ a { color: inherit; }
 /* A small reusable class. Any element with class="accent" (such as the span
    around "68.4% faster*") gets the teal highlight colour. */
 .accent { color: var(--accent); }
+
+/* Same idea for the magenta words ("EPA compliance" in the headline). */
+.magenta { color: var(--magenta); }
+
+/* Any text with class="keep-together" is never split across two lines. The
+   browser normally breaks a sentence wherever the line runs out of room.
+   "white-space: nowrap" forbids breaking inside this phrase, so the whole
+   phrase moves down to the next line instead if it does not fit. */
+.keep-together { white-space: nowrap; }
 
 
 /* ==========================================================================
@@ -582,13 +592,35 @@ main section {
   max-width: var(--max);       /* keep the content inside the same 1200px column as the rest of the page, even though the coloured band spans the full width */
   margin: 0 auto;
   display: grid;
-  /* Four tracks: "auto" for the logo, which takes only as much width as the
-     picture needs, then "1fr 1fr 1fr", three equal columns that share all
-     the remaining space: contact details, menu, address. */
-  grid-template-columns: auto 1fr 1fr 1fr;
+  /* Three tracks: "1fr auto 1fr". The middle track is "auto", so it is only
+     as wide as the menu itself, and the two outer tracks are "1fr", an equal
+     share each of all the remaining space. Because the two outer tracks are
+     always exactly the same width, the middle track, the menu, always sits
+     exactly in the centre of the page. This is the same trick the header
+     uses to keep the NEPTUNE title centred, so the footer menu lines up with
+     the title and the words above it. */
+  grid-template-columns: 1fr auto 1fr;
   gap: 32px;
   align-items: start;          /* line the tops of the columns up, instead of stretching them to equal height */
 }
+
+/* The left track holds two things side by side: the logo and the contact
+   details. "display: flex" lays children out in a row, and "gap" is the space
+   between them. "flex-wrap: wrap" lets the contact details drop below the logo
+   if there is not enough room for both side by side. */
+.footer-left { display: flex; gap: 32px; align-items: flex-start; flex-wrap: wrap; }
+
+/* The menu: all its text is centred, so the heading and each link are centred
+   on the middle of the page too, and not just the box around them. */
+.footer-menu { text-align: center; }
+
+/* The address sits in the right-hand track. "justify-self: end" pushes the
+   whole address block to the right-hand end of its track, so it mirrors the
+   logo on the left side. The text inside it stays left-aligned. "max-width"
+   limits how wide the block can grow (20rem is 320px), so the long street
+   line wraps onto a second line, instead of stretching right up against the
+   menu. */
+.footer-address { justify-self: end; max-width: 20rem; }
 
 /* The footer logo's height is worked out by the browser with calc(). It is
    the average of two numbers: 110px (the footer logo's old size) and the
@@ -672,6 +704,8 @@ main section {
   .site-header { padding-top: 56px; }
   .header-actions { justify-content: center; }
   .hero, .split, .cta-box, .footer-grid { grid-template-columns: 1fr; }   /* one column instead of two or three */
+  .footer-menu { text-align: left; }        /* centred text only makes sense beside the other footer parts, so on a phone it goes back to left-aligned like the rest */
+  .footer-address { justify-self: start; }  /* and the address goes back to the left edge, instead of the right-hand end */
   .split.reverse .split-text { order: 0; }    /* reset the swap, so text comes before the image like everywhere else */
   .or { margin: 0 auto; }                     /* centre the "or" circle */
 }
