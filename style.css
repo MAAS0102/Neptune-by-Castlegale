@@ -152,6 +152,11 @@ a { color: inherit; }
      page edge and the NEPTUNE text. */
   margin: 0;
   padding: 24px 16px 8px;      /* padding is the space INSIDE an element, between its edge and its content. Order: top, left-and-right, bottom */
+  /* "position: relative" does not move the header. It makes the header the
+     reference point for anything inside it that is positioned with
+     "absolute", which is how the Contact us button gets pinned to the
+     header's top-right corner (see .contact-btn below). */
+  position: relative;
   display: grid;               /* switch on CSS Grid, a layout system of rows and columns */
   /* Three columns: "1fr auto 1fr". "fr" is a fraction of the free space, and
      "auto" means "only as wide as its content". So the title in the middle
@@ -194,13 +199,12 @@ a { color: inherit; }
 
 .tagline { margin: 0; color: var(--accent); }
 
-.header-actions {
-  display: flex;               /* Flexbox, a simpler layout system than grid: items sit in a single row (or column) */
-  gap: 12px;
-  justify-content: flex-end;   /* push the items to the right-hand end of the row */
-  align-items: center;         /* centre them vertically */
-  flex-wrap: wrap;             /* if there is not enough room, let items drop onto a second line instead of overflowing */
-}
+/* The box holding the MENU button is the third grid item, so it sits in the
+   right-hand column, between the NEPTUNE title and the right edge of the
+   page. "justify-self: center" centres it within that column, exactly the
+   way the logo is centred in the left column, so the two mirror each other
+   on either side of the title. */
+.header-actions { justify-self: center; }
 
 /* Button style, used by the "Contact us" and "More stories" links. */
 .btn {
@@ -222,6 +226,23 @@ a { color: inherit; }
   color: var(--bg);
 }
 
+/* The Contact us button in the header (class="contact-btn" in the HTML).
+   "position: absolute" takes it out of the grid and places it by coordinates
+   measured from the nearest "relative" ancestor, which is the header. So
+   "top: 24px; right: 16px" means 24px down from the header's top edge and
+   16px in from its right edge: the top-right corner, at every screen size.
+   The size is a little smaller than the standard button, and it sits close to
+   the top, so that it stays clear of the larger MENU button below it when the
+   window is only a bit wider than a phone. These two settings come after the
+   ".btn" rule in the file, so they replace its padding and font size. */
+.contact-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  padding: 8px 14px;
+  font-size: .75rem;
+}
+
 /* The MENU button is a real <button>, which browsers style heavily by
    default, so each default is switched off here and replaced. */
 .menu-btn {
@@ -232,9 +253,11 @@ a { color: inherit; }
   font: inherit;               /* use the same font as the page, instead of the browser's default button font */
   font-weight: 700;            /* 700 is bold */
   letter-spacing: .08em;
+  font-size: clamp(1.2rem, 2.4vw, 1.9rem);   /* much larger than the page text, growing with the window between 1.2rem and 1.9rem */
+  padding: 12px 16px;          /* extra space around the text makes a bigger area to click or tap */
 }
 
-/* The line of values under the header ("Clarity. Control. Compliance. // ..."). */
+/* The line of values under the header ("Clarity. Control. Compliance."). */
 .values {
   max-width: var(--max);
   margin: 0 auto;
@@ -248,24 +271,14 @@ a { color: inherit; }
   line-height: 1.35;
 }
 
-/* One group of three words. "display: block" gives each group a full line of
-   its own, so the two groups stack on top of each other, centred, like the
-   lines in the reference picture. */
+/* The group of three words. "display: block" gives it a full line of its
+   own, centred under the header. */
 .value-group { display: block; }
-
-/* The "//" between the groups is no longer needed now that they sit on
-   separate lines. "display: none" removes it from the page completely (it
-   stays in the HTML, but nothing is drawn). Deleting this one line would
-   bring it back. */
-.values .sep { display: none; }
 
 /* The highlighted first letters. Each class only sets a colour. */
 .c-pink { color: var(--c-pink); }
 .c-orange { color: var(--c-orange); }
 .c-blue { color: var(--c-blue); }
-/* ".values .sep" is a descendant selector: only elements with class="sep"
-   that are inside ".values". It styles the "//" between the two phrases. */
-.values .sep { margin: 0 .6em; color: var(--accent); }
 
 
 /* ==========================================================================
@@ -553,6 +566,10 @@ main section {
    ========================================================================== */
 @media (max-width: 800px) {
   .site-header { grid-template-columns: 1fr; text-align: center; justify-items: center; }
+  /* Extra space above the stacked logo gives the Contact us button its own
+     band along the top, so on a narrow phone it can never sit on top of the
+     logo. It is still pinned to the top-right corner, as on larger screens. */
+  .site-header { padding-top: 56px; }
   .header-actions { justify-content: center; }
   .hero, .split, .cta-box, .footer-grid { grid-template-columns: 1fr; }   /* one column instead of two or three */
   .split.reverse .split-text { order: 0; }    /* reset the swap, so text comes before the image like everywhere else */

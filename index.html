@@ -118,6 +118,8 @@
       <p class="tagline">Your Plant, Your Way.</p>
     </div>
 
+    <!-- The third item in the header's grid, in the right-hand column. It
+         holds only the menu button now. -->
     <div class="header-actions">
       <!-- A real <button>. Its id="menuBtn" is how script.js finds it.
            aria-expanded says whether the menu it controls is open, and
@@ -125,13 +127,14 @@
            id). Both exist for screen readers. &#9776; is a special code that
            displays as the three-line "hamburger" icon. -->
       <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">&#9776; MENU</button>
-
-      <!-- A link that has been styled to look like a button (class="btn"
-           and the outline variant). It leads to the contact page. The order
-           of these two items in the HTML is the order they appear on screen,
-           left to right, because the container lays them out in a row. -->
-      <a class="btn btn-outline" href="contact.html">Contact us</a>
     </div>
+
+    <!-- A link that has been styled to look like a button (class="btn" and
+         the outline variant). It leads to the contact page. It sits directly
+         inside the header, outside the grid's three columns, because
+         style.css pins it to the top-right corner with the class
+         "contact-btn". -->
+    <a class="btn btn-outline contact-btn" href="contact.html">Contact us</a>
   </header>
 
   <!-- ======================================================================
@@ -158,24 +161,16 @@
        a short piece of text inside a line, so it does not start a new line.
        Every word begins with the letter C, and that first letter is wrapped
        in its own <span> so CSS can give it a highlight colour. The three
-       colour classes (c-pink, c-orange, c-blue) repeat in the same order in
-       both groups of words, and style.css defines what each one looks like.
-       The rest of each word is plain text and takes the colour of the
-       paragraph. Each group of three words sits in its own span with the
-       class "value-group", which style.css displays as one line per group.
-       The "//" between the groups is still here in the HTML, but style.css
-       hides it. -->
+       colour classes (c-pink, c-orange, c-blue) are defined in style.css,
+       which says what each one looks like. The rest of each word is plain
+       text and takes the colour of the paragraph. The three words sit in a
+       span with the class "value-group", which style.css displays as one
+       line. -->
   <p class="values">
     <span class="value-group">
       <span class="c-pink">C</span>larity.
       <span class="c-orange">C</span>ontrol.
       <span class="c-blue">C</span>ompliance.
-    </span>
-    <span class="sep">//</span>
-    <span class="value-group">
-      <span class="c-pink">C</span>entralised.
-      <span class="c-orange">C</span>onfidential.
-      <span class="c-blue">C</span>ustomisable.
     </span>
   </p>
 
