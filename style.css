@@ -213,7 +213,7 @@ a { color: inherit; }
   margin: 0;
 }
 
-.tagline { margin: 0; color: var(--accent); }
+.tagline { margin: 0; color: #ffffff; }   /* "Your Plant, Your Way." under NEPTUNE: plain white */
 
 /* The box holding the MENU button is the third grid item, so it sits in the
    right-hand column, between the NEPTUNE title and the right edge of the
