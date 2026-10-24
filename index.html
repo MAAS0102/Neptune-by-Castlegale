@@ -155,11 +155,28 @@
   </nav>
 
   <!-- The line of key values under the header. <span> is like <div> but for
-       a short piece of text inside a line, so it does not start a new line. -->
+       a short piece of text inside a line, so it does not start a new line.
+       Every word begins with the letter C, and that first letter is wrapped
+       in its own <span> so CSS can give it a highlight colour. The three
+       colour classes (c-pink, c-orange, c-blue) repeat in the same order in
+       both groups of words, and style.css defines what each one looks like.
+       The rest of each word is plain text and takes the colour of the
+       paragraph. Each group of three words sits in its own span with the
+       class "value-group", which style.css displays as one line per group.
+       The "//" between the groups is still here in the HTML, but style.css
+       hides it. -->
   <p class="values">
-    <span>Clarity. Control. Compliance.</span>
+    <span class="value-group">
+      <span class="c-pink">C</span>larity.
+      <span class="c-orange">C</span>ontrol.
+      <span class="c-blue">C</span>ompliance.
+    </span>
     <span class="sep">//</span>
-    <span>Centralised. Confidential. Customisable.</span>
+    <span class="value-group">
+      <span class="c-pink">C</span>entralised.
+      <span class="c-orange">C</span>onfidential.
+      <span class="c-blue">C</span>ustomisable.
+    </span>
   </p>
 
   <!-- <main> wraps the central content of the page, between header and

@@ -60,6 +60,40 @@
   --accent: #2fd0c4;    /* the highlight colour: a bright teal */
   --line: #026274;      /* thin divider lines and borders */
   --max: 1200px;        /* the widest the content is allowed to get, in pixels */
+
+  /* Colours for the "Clarity. Control. Compliance." line, sampled from the
+     reference picture. The text itself is the first one. */
+  --values-text: #4fadb7;     /* soft teal for the words */
+  --c-pink: #c7335d;          /* highlight for the first C of the first word in each group */
+  --c-orange: #e79841;        /* highlight for the second word */
+  --c-blue: #53a7dd;          /* highlight for the third word */
+}
+
+
+/* ==========================================================================
+   FONT: Poppins Bold
+   ==========================================================================
+   Normally a site can only use fonts that are already on the visitor's
+   device. @font-face teaches the browser a new font by pointing at a font
+   file. This font lives in the repo (fonts/poppins-bold-latin.woff), so it
+   does not need to be fetched from another company's servers.
+
+   - font-family: the name we choose to call it. We use that name later.
+   - src: where the file is. url() gives the location and format() tells the
+     browser what kind of file it is, so it can skip formats it cannot read.
+   - font-weight: which weight this file provides. 700 is bold.
+   - font-display: swap means "show the text straight away in a fallback font,
+     then switch when the real font has loaded", so nothing is ever invisible.
+
+   Poppins is open source under the SIL Open Font License. This file is a
+   cut-down copy holding only the Latin letters, which keeps it about 9 KB.
+   ========================================================================== */
+@font-face {
+  font-family: "Poppins";
+  src: url("fonts/poppins-bold-latin.woff") format("woff");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
 }
 
 
@@ -206,11 +240,29 @@ a { color: inherit; }
   margin: 0 auto;
   padding: 8px 16px 32px;
   text-align: center;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: .08em;
-  font-size: .9rem;
+  color: var(--values-text);   /* the soft teal defined at the top of the file */
+  font-family: "Poppins", system-ui, sans-serif;   /* our bold font first; if it fails to load, fall back to the system font */
+  font-weight: 700;
+  letter-spacing: 0;           /* no extra gaps between letters: this style is tight and chunky */
+  font-size: clamp(1.3rem, 2.6vw, 2rem);   /* grows with the window, between 1.3rem and 2rem */
+  line-height: 1.35;
 }
+
+/* One group of three words. "display: block" gives each group a full line of
+   its own, so the two groups stack on top of each other, centred, like the
+   lines in the reference picture. */
+.value-group { display: block; }
+
+/* The "//" between the groups is no longer needed now that they sit on
+   separate lines. "display: none" removes it from the page completely (it
+   stays in the HTML, but nothing is drawn). Deleting this one line would
+   bring it back. */
+.values .sep { display: none; }
+
+/* The highlighted first letters. Each class only sets a colour. */
+.c-pink { color: var(--c-pink); }
+.c-orange { color: var(--c-orange); }
+.c-blue { color: var(--c-blue); }
 /* ".values .sep" is a descendant selector: only elements with class="sep"
    that are inside ".values". It styles the "//" between the two phrases. */
 .values .sep { margin: 0 .6em; color: var(--accent); }
