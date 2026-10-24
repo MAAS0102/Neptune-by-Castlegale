@@ -1,42 +1,160 @@
 <!doctype html>
+<!-- The line above tells the browser "this is a modern HTML5 page". It has to
+     be the very first thing in the file, which is why this explanation comes
+     after it and not before. -->
+
+<!--
+  =========================================================================
+  index.html : WHAT is on the page (the content and its structure)
+  =========================================================================
+  HTML (HyperText Markup Language) describes the content of a page using
+  TAGS. A tag is a word in angle brackets. Most come in pairs:
+
+      <p>Some text</p>
+       ^ opening tag        ^ closing tag (note the slash)
+
+  Everything between the two tags is the element's content. Elements can sit
+  inside other elements, so the page is a tree, like nested lists in Python.
+
+  Tags can carry ATTRIBUTES, which are extra settings written inside the
+  opening tag as name="value", a bit like keyword arguments in Python:
+
+      <a href="contact.html" class="btn">Contact us</a>
+         ^ attribute          ^ another attribute
+
+  Two attributes matter most:
+    - class="name" : a label that style.css uses to pick elements and decide
+      how they look. Many elements can share one class.
+    - id="name"    : a unique label for exactly one element. script.js uses
+      ids to find specific things, and links can jump to them with #name.
+
+  Some tags have no content and no closing tag, such as <meta> and <link>.
+  They are called void elements.
+
+  Comments in HTML are written like this one: they begin with an angle
+  bracket, an exclamation mark and two dashes, and end with two dashes and
+  an angle bracket. The browser ignores them completely.
+
+  How the three files connect:
+    - this file loads style.css with <link rel="stylesheet" ...> in the head
+    - this file loads script.js with <script src="..."> at the very bottom
+  =========================================================================
+-->
+
+<!-- <html> wraps the entire page. lang="en" says the text is English, which
+     helps screen readers pronounce it properly and helps search engines. -->
 <html lang="en">
+
+<!-- ========================================================================
+     <head>: information ABOUT the page. Nothing in here appears on screen,
+     apart from the title, which shows on the browser tab.
+     ======================================================================== -->
 <head>
+  <!-- Which character set the file uses. utf-8 covers practically every
+       letter and symbol in every language. -->
   <meta charset="utf-8">
+
+  <!-- Makes the page behave properly on phones. Without this line, mobile
+       browsers pretend to be a wide desktop screen and shrink everything
+       down. "width=device-width" means use the phone's real width. -->
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- The text on the browser tab, and the headline in Google results. -->
   <title>Neptune by Castlegale | Your Plant, Your Way</title>
+
+  <!-- The grey summary snippet that search engines show under the title. -->
   <meta name="description" content="Neptune is a centralised wastewater treatment plant management platform. Clarity, control, compliance.">
+
+  <!-- "og" stands for Open Graph. These tags control the preview card shown
+       when the link is shared in WhatsApp, LinkedIn, Slack and similar apps. -->
   <meta property="og:title" content="Neptune by Castlegale">
   <meta property="og:description" content="See the flow, master the process.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://neptune.castlegale.com/">
-  <!-- TODO: add favicon.svg once the trident logo is drawn -->
+
+  <!-- TODO: add favicon.svg once the trident logo is drawn.
+       (A favicon is the tiny icon shown on the browser tab.) -->
+
+  <!-- Loads the stylesheet. rel="stylesheet" says what kind of file it is
+       and href="style.css" is where to find it, in the same folder as this
+       file. Every class used below is defined in that file. -->
   <link rel="stylesheet" href="style.css">
 </head>
+
+<!-- ========================================================================
+     <body>: everything visible on the page, from top to bottom.
+     ======================================================================== -->
 <body>
 
-  <!-- HEADER -->
+  <!-- ======================================================================
+       HEADER: the top bar. <header> is a "semantic" tag. It behaves like a
+       plain box, but its name tells browsers and screen readers what the
+       section is for.
+       ====================================================================== -->
   <header class="site-header">
+
+    <!-- <a> is a link. href is the destination. "/" means the site's home
+         page. aria-label gives screen readers a spoken name, because the
+         link contains only a picture and no text. -->
     <a class="brand" href="/" aria-label="Neptune by Castlegale home">
       <!-- TODO: replace with the trident logo SVG -->
+
+      <!-- <svg> draws a picture from shapes written as code, instead of
+           loading an image file. This is a stand-in logo made of hexagons.
+           viewBox="0 0 100 100" sets up an imaginary 100 by 100 drawing
+           grid. All coordinates below sit on that grid, and the whole drawing
+           scales to whatever size the CSS gives it. aria-hidden="true" tells
+           screen readers to skip it, since it is purely decorative. -->
       <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+        <!-- <polygon> draws a closed shape from a list of "x,y" points. This
+             one is the large outer hexagon. fill="none" leaves the inside
+             empty. stroke="currentColor" draws the outline in the current
+             text colour, which style.css sets to teal. stroke-width is the
+             line thickness. -->
         <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="none" stroke="currentColor" stroke-width="4"/>
+        <!-- The smaller hexagon inside it. -->
         <polygon points="50,25 72,37 72,63 50,75 28,63 28,37" fill="none" stroke="currentColor" stroke-width="3"/>
+        <!-- <line> draws a straight line from (x1,y1) to (x2,y2). This is the
+             vertical shaft that will become the trident handle. -->
         <line x1="50" y1="30" x2="50" y2="90" stroke="currentColor" stroke-width="4"/>
       </svg>
     </a>
+
+    <!-- <div> is a generic container box with no meaning of its own. It is
+         used to group things so CSS can position them together. -->
     <div class="title-block">
+      <!-- <h1> is the top-level heading. A page should have exactly one.
+           Heading tags run from h1 (most important) down to h6. -->
       <h1 class="wordmark">NEPTUNE</h1>
+      <!-- <p> is a paragraph of text. -->
       <p class="tagline">Your Plant, Your Way.</p>
     </div>
+
     <div class="header-actions">
+      <!-- A link that has been styled to look like a button (class="btn"
+           and the outline variant). It leads to the contact page. -->
       <a class="btn btn-outline" href="contact.html">Contact us</a>
+
+      <!-- A real <button>. Its id="menuBtn" is how script.js finds it.
+           aria-expanded says whether the menu it controls is open, and
+           aria-controls names which element it controls (by that element's
+           id). Both exist for screen readers. &#9776; is a special code that
+           displays as the three-line "hamburger" icon. -->
       <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">&#9776; MENU</button>
     </div>
   </header>
 
-  <!-- FULL-SCREEN MENU -->
+  <!-- ======================================================================
+       FULL-SCREEN MENU: the panel that covers the page when MENU is clicked.
+       <nav> marks a block of navigation links. The word "hidden" on it makes
+       the browser keep it invisible until script.js removes that attribute.
+       ====================================================================== -->
   <nav class="menu-overlay" id="menuOverlay" aria-label="Main menu" hidden>
+    <!-- &times; displays as the multiplication sign, used as the close "x". -->
     <button class="menu-close" id="menuClose" aria-label="Close menu">&times;</button>
+
+    <!-- <ul> is an unordered list. Each <li> is one item in it. Here every
+         item holds a link to one page of the site. -->
     <ul>
       <li><a href="/">Home</a></li>
       <li><a href="why-neptune.html">Why Neptune?</a></li>
@@ -46,35 +164,65 @@
     </ul>
   </nav>
 
+  <!-- The line of key values under the header. <span> is like <div> but for
+       a short piece of text inside a line, so it does not start a new line. -->
   <p class="values">
     <span>Clarity. Control. Compliance.</span>
     <span class="sep">//</span>
     <span>Centralised. Confidential. Customisable.</span>
   </p>
 
+  <!-- <main> wraps the central content of the page, between header and
+       footer. A page should have only one. -->
   <main>
-    <!-- HERO -->
+
+    <!-- ====================================================================
+         HERO: the first big section. Headline and testimonial on the left,
+         video on the right. <section> groups a related chunk of content.
+         ==================================================================== -->
     <section class="hero">
       <div class="hero-text">
+        <!-- <h2> is a second-level heading. The text "68.4% faster*" is
+             wrapped in a <span> with class="accent" so CSS can colour just
+             that part teal. &amp; displays as "&", which has to be written
+             this way because a bare & has a special meaning in HTML. -->
         <h2>Built for <span class="accent">68.4% faster*</span> operations &amp; zero-stress EPA compliance</h2>
+
+        <!-- <blockquote> marks a quotation. &ldquo; and &rdquo; are the
+             curly opening and closing quotation marks. <cite> holds the name
+             of the person being quoted. -->
         <blockquote class="testimonial">
           &ldquo;Neptune has helped our plant run smoother than ever.&rdquo;
           <cite>Colm, Merch Inc.</cite>
           <!-- TODO: get written permission from Colm before publishing -->
         </blockquote>
+
+        <!-- href="#" is a placeholder link that goes nowhere yet. -->
         <a class="btn btn-outline" href="#">More stories</a>
       </div>
+
       <div class="hero-video">
         <!-- TODO: replace VIDEO_ID with the YouTube/Vimeo id of the Castlegale video -->
         <div class="video-frame">
           <p>Neptune by Castlegale video</p>
+          <!-- An <iframe> embeds another web page inside this one, which is
+               how YouTube videos are added. It is commented out for now, so
+               the browser ignores it. Removing the comment markers around it
+               would switch it on. src is the address of what to embed,
+               allowfullscreen permits the full-screen button, and
+               loading="lazy" delays loading until the visitor scrolls near. -->
           <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Neptune by Castlegale" allowfullscreen loading="lazy"></iframe> -->
         </div>
       </div>
     </section>
 
-    <!-- PROBLEM -->
+    <!-- ====================================================================
+         PROBLEM: a picture on the left, text on the right. The id="problem"
+         gives this section a name that a link such as href="#problem" could
+         jump to. class="split" tells CSS to lay it out in two columns.
+         ==================================================================== -->
     <section class="split" id="problem">
+      <!-- Placeholder box standing in for the spreadsheet photo. -->
       <div class="media-box"><p>Image: messy spreadsheets / paper reports</p></div>
       <div class="split-text">
         <h2>The Problem</h2>
@@ -82,7 +230,11 @@
       </div>
     </section>
 
-    <!-- SOLUTION -->
+    <!-- ====================================================================
+         SOLUTION: the same layout, mirrored. The extra class "reverse" is
+         what lets CSS swap the order, so the picture sits on the other side.
+         In this HTML the text comes first and the image second.
+         ==================================================================== -->
     <section class="split reverse" id="solution">
       <div class="split-text">
         <h2>The Solution</h2>
@@ -91,7 +243,12 @@
       <div class="media-box"><p>Image: Neptune dashboard</p></div>
     </section>
 
-    <!-- FAQ -->
+    <!-- ====================================================================
+         FAQ: an accordion, meaning a list of questions that expand when
+         clicked. No JavaScript is needed, because <details> is a built-in
+         HTML element. Inside it, <summary> is the always-visible question
+         line, and everything else in <details> is revealed on click.
+         ==================================================================== -->
     <section class="faq" id="faq">
       <h2>FAQ</h2>
       <!-- TODO: partner to supply real questions and answers -->
@@ -100,25 +257,40 @@
       <details><summary>Question 3</summary><p>Answer 3</p></details>
     </section>
 
-    <!-- CALL TO ACTION -->
+    <!-- ====================================================================
+         CALL TO ACTION: the "Have more questions?" box with a phone number
+         on one side and an email address on the other.
+         ==================================================================== -->
     <section class="cta">
       <h2>Have more questions?</h2>
       <div class="cta-box">
         <div>
           <p>Call us now for a free consultation</p>
           <!-- TODO: put the real number in the href and text -->
+          <!-- A link whose href starts with "tel:" tells phones to start a
+               call. The number inside it has no spaces, because the
+               href is read by the phone, while the text between the tags is
+               what the visitor sees. The two can differ. -->
           <a class="cta-link" href="tel:+353000000000">+353 ...</a>
         </div>
+
+        <!-- The circled "or" between the two options. -->
         <span class="or">or</span>
+
         <div>
           <p>Email us now for a free consultation</p>
           <!-- TODO: put the real address in the href and text -->
+          <!-- "mailto:" opens the visitor's email program with a new message
+               addressed to this address. -->
           <a class="cta-link" href="mailto:info@castlegale.com">info@castlegale.com</a>
         </div>
       </div>
     </section>
 
-    <!-- WATER BAND -->
+    <!-- ====================================================================
+         WATER BAND: the wide decorative strip with the product description
+         and slogan. Its background is a gradient defined in style.css.
+         ==================================================================== -->
     <section class="water-band">
       <!-- TODO: add water background image, e.g. style="background-image:url(images/water.jpg)" -->
       <p>NEPTUNE: a centralised wastewater treatment plant management platform</p>
@@ -126,10 +298,15 @@
     </section>
   </main>
 
-  <!-- FOOTER -->
+  <!-- ========================================================================
+       FOOTER: the bottom of the page, with the logo, contact details,
+       address and copyright. <footer> is another semantic tag.
+       ======================================================================== -->
   <footer class="site-footer">
+    <!-- Three columns: brand, contact details and address. -->
     <div class="footer-grid">
       <div class="footer-brand">
+        <!-- The same stand-in hexagon logo as the header, drawn again. -->
         <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
           <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="none" stroke="currentColor" stroke-width="4"/>
           <polygon points="50,25 72,37 72,63 50,75 28,63 28,37" fill="none" stroke="currentColor" stroke-width="3"/>
@@ -138,6 +315,7 @@
         <p>Neptune by Castlegale</p>
       </div>
       <div>
+        <!-- <h3> is a third-level heading. -->
         <h3>Contact details</h3>
         <p>Phone: <!-- TODO --> ...</p>
         <p>Email: <!-- TODO --> ...</p>
@@ -147,10 +325,16 @@
         <p><!-- TODO --> ...</p>
       </div>
     </div>
+
+    <!-- &copy; displays as the copyright symbol. -->
     <p class="copyright">&copy; 2026 Neptune by Castlegale</p>
     <p class="footnote">* 68.4% figure: <!-- TODO: add source / methodology --> reference to follow.</p>
   </footer>
 
+  <!-- Loads and runs script.js. It sits at the very bottom on purpose: the
+       browser reads a page from top to bottom, and the script needs the menu
+       elements above to already exist before it goes looking for them (by
+       their ids) in order to attach behaviour. -->
   <script src="script.js"></script>
 </body>
 </html>

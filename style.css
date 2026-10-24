@@ -1,132 +1,492 @@
+/* ==========================================================================
+   style.css : how the page LOOKS (CSS = Cascading Style Sheets)
+   ==========================================================================
+   HTML (index.html) says what is on the page. This file says how each thing
+   looks: colours, sizes, spacing, positions.
+
+   Every CSS rule has the same shape:
+
+       selector {
+         property: value;
+         property: value;
+       }
+
+   - The SELECTOR picks which elements the rule applies to:
+       h1         every <h1> element                       (matches by tag name)
+       .hero      every element with class="hero"          (a dot means class)
+       #faq       the one element with id="faq"            (a hash means id)
+       .a .b      a ".b" element sitting somewhere inside an ".a" element
+       .a > .b    a ".b" element that is a direct child of ".a"
+       a, b       a comma means "either of these", the rule applies to both
+       .btn:hover a ".btn" element while the mouse is over it (a pseudo-class)
+   - Each PROPERTY: VALUE; line is one setting. A property is like a keyword
+     argument in Python, and the semicolon ends the line.
+
+   The "Cascading" part: when several rules touch the same element, the more
+   specific selector wins, and if they are equally specific, the one that
+   comes LATER in the file wins. That is why order matters in this file.
+
+   Comparing to Python: CSS has no loops, no if statements and no functions
+   of its own, only rules that describe appearance. It is closer to a
+   configuration file than a program.
+
+   Comment syntax in CSS is /* ... */ and it can span many lines. There is no
+   single-line # comment like in Python.
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1. DESIGN TOKENS (the colour and size variables)
+   ==========================================================================
+   :root means "the very top element of the page", so anything defined here
+   is available everywhere below.
+
+   Names starting with two dashes are CSS variables, like constants in
+   Python (BG = "#07121f"). Define them once, then use them anywhere with
+   var(--name). Change a value here and every place that uses it changes.
+
+   Colours are written as hex codes: # followed by red, green and blue, each
+   as two hexadecimal digits from 00 (none) to ff (full). So #07121f is a
+   tiny amount of red, a little green and a bit more blue, which makes a
+   very dark navy.
+   ========================================================================== */
 :root {
-  --bg: #07121f;
-  --bg-alt: #0c1c2e;
-  --text: #e8f1f8;
-  --muted: #9bb0c3;
-  --accent: #2fd0c4;
-  --line: #1f3550;
-  --max: 1200px;
+  --bg: #07121f;        /* page background: the darkest navy */
+  --bg-alt: #0c1c2e;    /* slightly lighter navy, for boxes that sit on the page */
+  --text: #e8f1f8;      /* main text colour: a soft off-white with a blue tint */
+  --muted: #9bb0c3;     /* dimmer grey-blue for secondary text */
+  --accent: #2fd0c4;    /* the highlight colour: a bright teal */
+  --line: #1f3550;      /* thin divider lines and borders */
+  --max: 1200px;        /* the widest the content is allowed to get, in pixels */
 }
 
+
+/* ==========================================================================
+   2. RESETS AND BASE STYLES (rules for the whole page)
+   ========================================================================== */
+
+/* "*" matches every element. By default browsers calculate a box's width as
+   its content PLUS its padding and border, which makes sizes awkward to work
+   out. "border-box" changes that so a width of 300px means 300px in total,
+   padding and border included. Almost every modern site sets this. */
 * { box-sizing: border-box; }
+
+/* "scroll-behavior: smooth" makes clicks on in-page links (like #faq)
+   glide to the target instead of jumping. */
 html { scroll-behavior: smooth; }
+
+/* <body> is everything visible on the page. */
 body {
-  margin: 0;
-  background: var(--bg);
-  color: var(--text);
+  margin: 0;                   /* browsers add a small gap around the page by default; remove it */
+  background: var(--bg);       /* use the --bg variable defined above */
+  color: var(--text);          /* default text colour for everything inside */
+  /* font-family is a priority list, like a Python list of fallbacks. The
+     browser uses the first font that exists on the visitor's device.
+     system-ui means "whatever the operating system normally uses". The last
+     entry, sans-serif, is the generic fallback. */
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  line-height: 1.6;
+  line-height: 1.6;            /* space between lines of text, as a multiple of the font size */
 }
-h1, h2, h3 { text-transform: uppercase; letter-spacing: .04em; line-height: 1.1; margin: 0 0 .6em; }
+
+/* All three heading levels share these settings. */
+h1, h2, h3 {
+  text-transform: uppercase;   /* display the text in capitals, whatever is typed in the HTML */
+  letter-spacing: .04em;       /* small extra gap between letters. "em" is a unit relative to the current font size */
+  line-height: 1.1;            /* tighter lines than body text, because headings are large */
+  margin: 0 0 .6em;            /* margin is the space OUTSIDE an element. Four numbers go clockwise from the top: top, right, bottom, left. Three numbers mean top, left-and-right, bottom. So this is: top 0, sides 0, bottom 0.6em */
+}
+
+/* Links: inherit means "use the same colour as the text around it", instead
+   of the browser's default blue. */
 a { color: inherit; }
+
+/* A small reusable class. Any element with class="accent" (such as the span
+   around "68.4% faster*") gets the teal highlight colour. */
 .accent { color: var(--accent); }
 
-/* Header */
+
+/* ==========================================================================
+   3. HEADER (the top bar: logo, NEPTUNE title, Contact us and MENU)
+   ========================================================================== */
+
 .site-header {
-  max-width: var(--max); margin: 0 auto; padding: 24px 16px 8px;
-  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px;
+  max-width: var(--max);       /* never wider than 1200px */
+  margin: 0 auto;              /* "0 auto" = no top/bottom margin, automatic left/right margins, which centres a block on the page */
+  padding: 24px 16px 8px;      /* padding is the space INSIDE an element, between its edge and its content. Order: top, left-and-right, bottom */
+  display: grid;               /* switch on CSS Grid, a layout system of rows and columns */
+  /* Three columns: "1fr auto 1fr". "fr" is a fraction of the free space, and
+     "auto" means "only as wide as its content". So the title in the middle
+     takes what it needs and the logo and buttons share the leftover space
+     equally, which keeps the title exactly centred. */
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;         /* line the three items up vertically in the middle */
+  gap: 16px;                   /* space between grid cells */
 }
-.logo { width: 72px; height: 72px; color: var(--accent); }
-.title-block { text-align: center; }
-.wordmark { font-size: clamp(2.4rem, 8vw, 5rem); letter-spacing: .18em; margin: 0; }
+
+/* The logo is an SVG (an image defined by shapes rather than pixels). */
+.logo {
+  width: 72px;
+  height: 72px;
+  color: var(--accent);        /* the SVG's shapes are drawn with "currentColor", which means "use whatever the text colour is here". Setting colour here therefore colours the logo teal */
+}
+
+.title-block { text-align: center; }   /* centre the title and tagline inside their column */
+
+.wordmark {
+  /* clamp(smallest, ideal, largest) picks a size that scales with the screen
+     but is never below 2.4rem or above 5rem. "vw" is 1% of the browser
+     window's width, so 8vw grows as the window widens. "rem" is relative to
+     the page's base font size, usually 16px, so 5rem is 80px. */
+  font-size: clamp(2.4rem, 8vw, 5rem);
+  letter-spacing: .18em;       /* wide gaps between the letters of NEPTUNE */
+  margin: 0;
+}
+
 .tagline { margin: 0; color: var(--accent); }
-.header-actions { display: flex; gap: 12px; justify-content: flex-end; align-items: center; flex-wrap: wrap; }
+
+.header-actions {
+  display: flex;               /* Flexbox, a simpler layout system than grid: items sit in a single row (or column) */
+  gap: 12px;
+  justify-content: flex-end;   /* push the items to the right-hand end of the row */
+  align-items: center;         /* centre them vertically */
+  flex-wrap: wrap;             /* if there is not enough room, let items drop onto a second line instead of overflowing */
+}
+
+/* Button style, used by the "Contact us" and "More stories" links. */
 .btn {
-  display: inline-block; padding: 10px 18px; text-decoration: none;
-  border: 1px solid var(--text); text-transform: uppercase; font-size: .85rem; letter-spacing: .08em;
+  display: inline-block;       /* sits in the line of text like a word, but can have padding and a border like a box */
+  padding: 10px 18px;          /* 10px top and bottom, 18px left and right */
+  text-decoration: none;       /* remove the default underline on links */
+  border: 1px solid var(--text);   /* border shorthand: thickness, style, colour */
+  text-transform: uppercase;
+  font-size: .85rem;
+  letter-spacing: .08em;
 }
-.btn:hover, .btn:focus-visible { background: var(--accent); border-color: var(--accent); color: var(--bg); }
+
+/* Hover and keyboard focus effect. ":hover" applies while the mouse is over
+   the button, and ":focus-visible" applies while it is selected using the
+   keyboard (the Tab key). Both get the same look: teal fill, dark text. */
+.btn:hover, .btn:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg);
+}
+
+/* The MENU button is a real <button>, which browsers style heavily by
+   default, so each default is switched off here and replaced. */
 .menu-btn {
-  background: none; border: 0; color: var(--text); cursor: pointer;
-  font: inherit; font-weight: 700; letter-spacing: .08em;
+  background: none;
+  border: 0;
+  color: var(--text);
+  cursor: pointer;             /* turns the mouse pointer into a hand */
+  font: inherit;               /* use the same font as the page, instead of the browser's default button font */
+  font-weight: 700;            /* 700 is bold */
+  letter-spacing: .08em;
 }
+
+/* The line of values under the header ("Clarity. Control. Compliance. // ..."). */
 .values {
-  max-width: var(--max); margin: 0 auto; padding: 8px 16px 32px;
-  text-align: center; color: var(--muted); text-transform: uppercase; letter-spacing: .08em; font-size: .9rem;
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 8px 16px 32px;
+  text-align: center;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-size: .9rem;
 }
+/* ".values .sep" is a descendant selector: only elements with class="sep"
+   that are inside ".values". It styles the "//" between the two phrases. */
 .values .sep { margin: 0 .6em; color: var(--accent); }
 
-/* Menu overlay */
+
+/* ==========================================================================
+   4. FULL-SCREEN MENU (the overlay that opens when MENU is clicked)
+   ========================================================================== */
+
 .menu-overlay {
-  position: fixed; inset: 0; background: var(--bg); z-index: 10;
-  display: flex; align-items: center; justify-content: center;
-}
-.menu-overlay[hidden] { display: none; }
-.menu-overlay ul { list-style: none; padding: 0; margin: 0; text-align: center; }
-.menu-overlay a {
-  display: block; padding: 10px; text-decoration: none; text-transform: uppercase;
-  font-size: clamp(1.8rem, 6vw, 3.5rem); font-weight: 700; letter-spacing: .06em;
-}
-.menu-overlay a:hover, .menu-overlay a:focus-visible { color: var(--accent); }
-.menu-close {
-  position: absolute; top: 16px; right: 24px; background: none; border: 0;
-  color: var(--text); font-size: 2.5rem; cursor: pointer;
+  position: fixed;             /* take the element out of the normal flow and pin it to the browser window, so it stays put while the page scrolls */
+  inset: 0;                    /* shorthand for top: 0; right: 0; bottom: 0; left: 0; so it stretches to cover the whole window */
+  background: var(--bg);       /* a solid background, so the page underneath is hidden */
+  z-index: 10;                 /* stacking order. Higher numbers draw on top of lower ones, so 10 puts the menu above everything else */
+  display: flex;
+  align-items: center;         /* centre the list vertically... */
+  justify-content: center;     /* ...and horizontally */
 }
 
-/* Sections */
-main section { max-width: var(--max); margin: 0 auto; padding: 48px 16px; }
-.hero { display: grid; grid-template-columns: 1fr 1.4fr; gap: 32px; border-top: 1px solid var(--line); }
-.hero h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
-.testimonial { margin: 32px 0 20px; padding: 20px; background: var(--bg-alt); border-left: 3px solid var(--accent); }
-.testimonial cite { display: block; margin-top: 8px; color: var(--muted); font-style: normal; }
-.video-frame {
-  aspect-ratio: 16 / 9; border: 1px solid var(--line); background: var(--bg-alt);
-  display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted);
+/* The HTML attribute "hidden" normally hides an element. But the rule above
+   sets display: flex, which would override it and keep the menu visible all
+   the time. The selector [hidden] matches any element that has that
+   attribute. This rule is more specific, so it wins and the menu is
+   properly hidden until script.js removes the attribute. */
+.menu-overlay[hidden] { display: none; }
+
+.menu-overlay ul {
+  list-style: none;            /* remove the bullet points from the list */
+  padding: 0;                  /* lists have indentation by default; remove it */
+  margin: 0;
+  text-align: center;
 }
+
+.menu-overlay a {
+  display: block;              /* make each link fill a full line, so the whole row can be clicked */
+  padding: 10px;
+  text-decoration: none;
+  text-transform: uppercase;
+  font-size: clamp(1.8rem, 6vw, 3.5rem);   /* big text that scales with the screen width */
+  font-weight: 700;
+  letter-spacing: .06em;
+}
+
+.menu-overlay a:hover, .menu-overlay a:focus-visible { color: var(--accent); }
+
+.menu-close {
+  position: absolute;         /* position relative to the nearest positioned ancestor. Here that is the fixed overlay, so these numbers are measured from its corner */
+  top: 16px;
+  right: 24px;
+  background: none;
+  border: 0;
+  color: var(--text);
+  font-size: 2.5rem;
+  cursor: pointer;
+}
+
+
+/* ==========================================================================
+   5. MAIN SECTIONS
+   ========================================================================== */
+
+/* "main section" matches every <section> inside <main>. These are the
+   shared defaults; the more specific rules below add to them. */
+main section {
+  max-width: var(--max);
+  margin: 0 auto;
+  padding: 48px 16px;
+}
+
+/* ---- Hero: headline and testimonial on the left, video on the right ---- */
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;   /* two columns; the right one (video) is 1.4 times as wide as the left */
+  gap: 32px;
+  border-top: 1px solid var(--line);  /* a thin divider line above the section */
+}
+
+.hero h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+
+/* A <blockquote> is the HTML tag for a quotation. */
+.testimonial {
+  margin: 32px 0 20px;
+  padding: 20px;
+  background: var(--bg-alt);
+  border-left: 3px solid var(--accent);   /* a teal stripe down the left edge only */
+}
+
+.testimonial cite {            /* <cite> holds the name of the person quoted */
+  display: block;              /* put it on its own line below the quote */
+  margin-top: 8px;
+  color: var(--muted);
+  font-style: normal;          /* browsers italicise <cite> by default; turn that off */
+}
+
+.video-frame {
+  /* aspect-ratio keeps the box a fixed shape. 16 / 9 is widescreen video,
+     so the height is always worked out automatically from the width. */
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--line);
+  background: var(--bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+}
+
+/* When the real video <iframe> is added, make it fill the frame completely. */
 .video-frame iframe { width: 100%; height: 100%; border: 0; }
 
-.split { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; border-top: 1px solid var(--line); }
-.split.reverse .split-text { order: 1; }
-.media-box {
-  min-height: 260px; border: 1px dashed var(--line); background: var(--bg-alt);
-  display: flex; align-items: center; justify-content: center; text-align: center; color: var(--muted); padding: 16px;
+/* ---- Problem and Solution: text beside a picture ---- */
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;     /* two equal columns */
+  gap: 32px;
+  align-items: center;
+  border-top: 1px solid var(--line);
 }
+
+/* The Solution section has class="split reverse". Its HTML lists the text
+   first and the image second. "order" changes the visual sequence of grid
+   items without touching the HTML: lower numbers come first, and every item
+   starts at order 0. Giving the text order: 1 pushes it after the image, so
+   on screen the picture sits on the left. */
+.split.reverse .split-text { order: 1; }
+
+/* Dashed placeholder boxes that stand in for photos until real images exist. */
+.media-box {
+  min-height: 260px;           /* at least this tall; can grow if content needs more */
+  border: 1px dashed var(--line);
+  background: var(--bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: var(--muted);
+  padding: 16px;
+}
+
 .split-text p { font-size: 1.1rem; color: var(--muted); }
 
-/* FAQ */
-.faq { border-top: 1px solid var(--line); max-width: 800px !important; }
+/* ---- FAQ: the accordion ----
+   Each question is an HTML <details> element with a <summary>. The browser
+   itself handles opening and closing it when clicked, so no JavaScript is
+   needed. */
+.faq {
+  border-top: 1px solid var(--line);
+  /* Narrow the FAQ to 800px, so the questions are comfortable to read.
+     "!important" forces a value to win over any other rule that sets the
+     same property. Strictly it is not needed here: ".faq" (a class) already
+     beats "main section" (only tag names) on specificity. It is harmless,
+     but worth knowing that it is a heavy tool to use sparingly. */
+  max-width: 800px !important;
+}
+
 .faq details { border-bottom: 1px solid var(--line); padding: 16px 0; }
-.faq summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
+
+.faq summary {
+  cursor: pointer;
+  font-weight: 600;
+  list-style: none;            /* hide the browser's default little triangle marker */
+  display: flex;
+  justify-content: space-between;   /* question text at the left, the + at the far right */
+}
+
+/* "::after" is a pseudo-element: CSS can create a small piece of content
+   attached to the end of an element, with no HTML needed. Here it draws the
+   "+" at the end of each question. */
 .faq summary::after { content: "+"; color: var(--accent); font-size: 1.4rem; line-height: 1; }
+
+/* The browser adds an "open" attribute to <details> while it is expanded.
+   [open] matches that state, so the "+" becomes a minus sign. "\2212" is the
+   Unicode code for the proper minus character. */
 .faq details[open] summary::after { content: "\2212"; }
+
 .faq details p { color: var(--muted); margin: 12px 0 0; }
 
-/* CTA */
+/* ---- Call to action: "Call us now  or  Email us now" ---- */
 .cta { text-align: center; }
+
 .cta-box {
-  display: grid; grid-template-columns: 1fr auto 1fr; gap: 24px; align-items: center;
-  border: 1px solid var(--line); padding: 32px 24px; background: var(--bg-alt);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;   /* call on the left, the "or" circle in the middle, email on the right */
+  gap: 24px;
+  align-items: center;
+  border: 1px solid var(--line);
+  padding: 32px 24px;
+  background: var(--bg-alt);
 }
-.cta-link { font-size: 1.4rem; font-weight: 700; color: var(--accent); text-decoration: none; word-break: break-word; }
+
+.cta-link {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-decoration: none;
+  word-break: break-word;      /* allow a long email address to wrap onto the next line instead of running outside its box */
+}
+
 .cta-link:hover, .cta-link:focus-visible { text-decoration: underline; }
-.or { display: inline-flex; width: 44px; height: 44px; border: 1px solid var(--line); border-radius: 50%; align-items: center; justify-content: center; color: var(--muted); }
 
-/* Water band */
-.water-band {
-  max-width: none !important; text-align: center; padding: 96px 16px !important;
-  background: linear-gradient(180deg, var(--bg), #0a2a3d 60%, #0d3b50);
-  background-size: cover; background-position: center;
+/* The circled "or". A 44px square with border-radius: 50% becomes a circle,
+   because 50% rounds each corner by half the box's size. */
+.or {
+  display: inline-flex;
+  width: 44px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
 }
-.water-band .slogan { font-size: clamp(1.4rem, 4vw, 2.4rem); font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; }
 
-/* Footer */
+/* ---- Water band: the wide strip with the "NEPTUNE ..." line ---- */
+.water-band {
+  max-width: none !important;  /* let this strip span the full width instead of the 1200px limit that other sections get. As with .faq, the class already wins on specificity, so "!important" is extra here */
+  text-align: center;
+  padding: 96px 16px !important;
+  /* A gradient is generated by the browser, not an image file. This one
+     fades from the page colour at the top, through a mid blue at 60% of the
+     height, to a deeper teal-blue at the bottom. 180deg means top to bottom. */
+  background: linear-gradient(180deg, var(--bg), #0a2a3d 60%, #0d3b50);
+  /* If a real photo is added later, these two settings would size it to
+     cover the whole strip and keep it centred. */
+  background-size: cover;
+  background-position: center;
+}
+
+.water-band .slogan {
+  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: .06em;
+}
+
+
+/* ==========================================================================
+   6. FOOTER
+   ========================================================================== */
+
 .site-footer { border-top: 1px solid var(--line); padding: 40px 16px 24px; }
-.footer-grid { max-width: var(--max); margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
-.footer-brand .logo { width: 64px; height: 64px; }
+
+.footer-grid {
+  max-width: var(--max);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;   /* three equal columns: brand, contact details, address */
+  gap: 24px;
+}
+
+.footer-brand .logo { width: 64px; height: 64px; }   /* a slightly smaller logo than in the header */
 .site-footer h3 { font-size: 1rem; }
 .site-footer p { margin: .3em 0; color: var(--muted); }
+
+/* Here "!important" does matter. The rule above, ".site-footer p", targets a
+   class plus a tag, so it is MORE specific than ".copyright" alone and would
+   otherwise overwrite this margin-top. "!important" lets this value win. */
 .copyright { text-align: center; margin-top: 32px !important; }
 .footnote { text-align: center; font-size: .8rem; }
 
-/* Accessibility */
+
+/* ==========================================================================
+   7. ACCESSIBILITY
+   ========================================================================== */
+
+/* Draw a clear teal outline around whatever the keyboard has selected, so
+   people navigating with the Tab key can see where they are.
+   "outline-offset" moves the outline a few pixels away from the element. */
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* A @media block applies its rules only when a condition is true. This one
+   respects a setting some people turn on in their device to avoid
+   animation, which can cause discomfort. If they have it on, smooth
+   scrolling is switched off. */
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
 
-/* Mobile */
+
+/* ==========================================================================
+   8. MOBILE LAYOUT
+   ==========================================================================
+   "@media (max-width: 800px)" means: apply the rules inside only when the
+   browser window is 800 pixels wide or narrower, as on a phone. Rules inside
+   replace the earlier desktop ones, because they come later in the file.
+
+   Overall effect: every multi-column grid collapses into a single column,
+   so everything stacks vertically.
+   ========================================================================== */
 @media (max-width: 800px) {
   .site-header { grid-template-columns: 1fr; text-align: center; justify-items: center; }
   .header-actions { justify-content: center; }
-  .hero, .split, .cta-box, .footer-grid { grid-template-columns: 1fr; }
-  .split.reverse .split-text { order: 0; }
-  .or { margin: 0 auto; }
+  .hero, .split, .cta-box, .footer-grid { grid-template-columns: 1fr; }   /* one column instead of two or three */
+  .split.reverse .split-text { order: 0; }    /* reset the swap, so text comes before the image like everywhere else */
+  .or { margin: 0 auto; }                     /* centre the "or" circle */
 }
