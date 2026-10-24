@@ -112,8 +112,11 @@ a { color: inherit; }
    ========================================================================== */
 
 .site-header {
-  max-width: var(--max);       /* never wider than 1200px */
-  margin: 0 auto;              /* "0 auto" = no top/bottom margin, automatic left/right margins, which centres a block on the page */
+  /* No maximum width here, unlike the sections below. The header stretches
+     across the whole browser window, so its left edge is the true edge of
+     the page. That is what lets the logo sit exactly midway between the
+     page edge and the NEPTUNE text. */
+  margin: 0;
   padding: 24px 16px 8px;      /* padding is the space INSIDE an element, between its edge and its content. Order: top, left-and-right, bottom */
   display: grid;               /* switch on CSS Grid, a layout system of rows and columns */
   /* Three columns: "1fr auto 1fr". "fr" is a fraction of the free space, and
@@ -125,11 +128,19 @@ a { color: inherit; }
   gap: 16px;                   /* space between grid cells */
 }
 
-/* The logo is an SVG (an image defined by shapes rather than pixels). */
+/* The link wrapped around the header logo (class="brand" in the HTML) is the
+   first of the three grid items, so it sits in the first column, the one
+   between the left edge of the page and the NEPTUNE title. A grid item
+   normally hugs the start of its column. "justify-self" sets how one item is
+   placed along the row inside its own column, and "center" puts the logo
+   exactly midway between the left edge and the start of the NEPTUNE text. */
+.brand { justify-self: center; }
+
+/* The logo is a PNG picture (images/logo.png), shown by an <img> tag. */
 .logo {
-  width: 72px;
-  height: 72px;
-  color: var(--accent);        /* the SVG's shapes are drawn with "currentColor", which means "use whatever the text colour is here". Setting colour here therefore colours the logo teal */
+  height: 80px;                /* fix the height... */
+  width: auto;                 /* ...and let the width follow automatically, so the picture keeps its true proportions and is not squashed */
+  display: block;              /* an <img> is "inline" by default, like a letter in a line of text, which leaves a small gap underneath. "block" removes that gap, so centring is exact */
 }
 
 .title-block { text-align: center; }   /* centre the title and tagline inside their column */
@@ -448,7 +459,7 @@ main section {
   gap: 24px;
 }
 
-.footer-brand .logo { width: 64px; height: 64px; }   /* a slightly smaller logo than in the header */
+.footer-brand .logo { height: 64px; }   /* a slightly smaller logo than in the header. Width stays "auto" from the rule above, so only the height is given */
 .site-footer h3 { font-size: 1rem; }
 .site-footer p { margin: .3em 0; color: var(--muted); }
 

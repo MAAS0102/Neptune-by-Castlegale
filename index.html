@@ -72,8 +72,10 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://neptune.castlegale.com/">
 
-  <!-- TODO: add favicon.svg once the trident logo is drawn.
-       (A favicon is the tiny icon shown on the browser tab.) -->
+  <!-- The favicon is the tiny icon shown on the browser tab. rel="icon" says
+       that is what this file is for, and href points to the image. The
+       browser shrinks the logo to fit. -->
+  <link rel="icon" type="image/png" href="images/logo.png">
 
   <!-- Loads the stylesheet. rel="stylesheet" says what kind of file it is
        and href="style.css" is where to find it, in the same folder as this
@@ -97,27 +99,13 @@
          page. aria-label gives screen readers a spoken name, because the
          link contains only a picture and no text. -->
     <a class="brand" href="/" aria-label="Neptune by Castlegale home">
-      <!-- TODO: replace with the trident logo SVG -->
-
-      <!-- <svg> draws a picture from shapes written as code, instead of
-           loading an image file. This is a stand-in logo made of hexagons.
-           viewBox="0 0 100 100" sets up an imaginary 100 by 100 drawing
-           grid. All coordinates below sit on that grid, and the whole drawing
-           scales to whatever size the CSS gives it. aria-hidden="true" tells
-           screen readers to skip it, since it is purely decorative. -->
-      <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
-        <!-- <polygon> draws a closed shape from a list of "x,y" points. This
-             one is the large outer hexagon. fill="none" leaves the inside
-             empty. stroke="currentColor" draws the outline in the current
-             text colour, which style.css sets to teal. stroke-width is the
-             line thickness. -->
-        <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="none" stroke="currentColor" stroke-width="4"/>
-        <!-- The smaller hexagon inside it. -->
-        <polygon points="50,25 72,37 72,63 50,75 28,63 28,37" fill="none" stroke="currentColor" stroke-width="3"/>
-        <!-- <line> draws a straight line from (x1,y1) to (x2,y2). This is the
-             vertical shaft that will become the trident handle. -->
-        <line x1="50" y1="30" x2="50" y2="90" stroke="currentColor" stroke-width="4"/>
-      </svg>
+      <!-- <img> shows a picture from an image file. It has no closing tag.
+           src is the file's location: the "images" folder, then the file
+           name. alt is the text a screen reader speaks, and what appears if
+           the picture fails to load. This logo is a PNG with a transparent
+           background, which is why the page colour shows through around the
+           hexagon. The size is set in style.css through class="logo". -->
+      <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
     </a>
 
     <!-- <div> is a generic container box with no meaning of its own. It is
@@ -308,12 +296,9 @@
     <!-- Three columns: brand, contact details and address. -->
     <div class="footer-grid">
       <div class="footer-brand">
-        <!-- The same stand-in hexagon logo as the header, drawn again. -->
-        <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
-          <polygon points="50,5 90,27 90,73 50,95 10,73 10,27" fill="none" stroke="currentColor" stroke-width="4"/>
-          <polygon points="50,25 72,37 72,63 50,75 28,63 28,37" fill="none" stroke="currentColor" stroke-width="3"/>
-          <line x1="50" y1="30" x2="50" y2="90" stroke="currentColor" stroke-width="4"/>
-        </svg>
+        <!-- The same logo image as in the header, shown again. The browser
+             downloads the file only once and reuses it. -->
+        <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
         <p>Neptune by Castlegale</p>
       </div>
       <div>
