@@ -61,12 +61,8 @@
   --line: #026274;      /* thin divider lines and borders */
   --max: 1200px;        /* the widest the content is allowed to get, in pixels */
 
-  /* Colours for the "Clarity. Control. Compliance." line, sampled from the
-     reference picture. The text itself is the first one. */
-  --values-text: #4fadb7;     /* soft teal for the words */
-  --c-pink: #c7335d;          /* highlight for the first C of the first word in each group */
-  --c-orange: #e79841;        /* highlight for the second word */
-  --c-blue: #53a7dd;          /* highlight for the third word */
+  /* Colour of the big statement under the header. */
+  --values-text: #48C1B8;     /* baby teal / aqua */
 
   --footer-bg: #0C556B;       /* background of the main part of the footer (the bottom strip keeps --bg) */
 
@@ -277,7 +273,7 @@ a { color: inherit; }
   padding: 12px 16px;          /* extra space around the text makes a bigger area to click or tap */
 }
 
-/* The line of values under the header ("Clarity. Control. Compliance."). */
+/* The big statement under the header ("Your new centralised waste water ..."). */
 .values {
   max-width: var(--max);
   margin: 0 auto;
@@ -287,33 +283,10 @@ a { color: inherit; }
   font-family: "Poppins", system-ui, sans-serif;   /* our bold font first; if it fails to load, fall back to the system font */
   font-weight: 700;
   letter-spacing: 0;           /* no extra gaps between letters: this style is tight and chunky */
-  font-size: clamp(1.3rem, 2.6vw, 2rem);   /* grows with the window, between 1.3rem and 2rem */
-  line-height: 1.35;
+  font-size: clamp(1.7rem, 4vw, 3.2rem);   /* grows with the window, between 1.7rem and 3.2rem */
+  line-height: 1.25;
+  text-wrap: balance;          /* if the sentence needs two lines, split it into two lines of similar length */
 }
-
-/* The group of three words. "display: block" gives it a full line of its
-   own, centred under the header. */
-.value-group { display: block; }
-
-/* The sub heading under the three words: a plain-language description of the
-   product. It is white, a little larger than normal text, and on its own line
-   ("display: block"). The ".values" rule above gave everything inside it the
-   bold Poppins font and teal colour, so this rule switches both back: the
-   normal system font, medium weight, and plain white. */
-.values-sub {
-  display: block;
-  margin-top: .6em;                        /* a little space above, to separate it from the three words */
-  color: #ffffff;                          /* plain white */
-  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
-  font-weight: 500;                        /* 400 is normal and 700 is bold, so 500 is in between */
-  font-size: clamp(1rem, 1.9vw, 1.35rem);  /* grows with the window, between 1rem and 1.35rem */
-  line-height: 1.4;
-}
-
-/* The highlighted first letters. Each class only sets a colour. */
-.c-pink { color: var(--c-pink); }
-.c-orange { color: var(--c-orange); }
-.c-blue { color: var(--c-blue); }
 
 
 /* ==========================================================================
