@@ -131,16 +131,18 @@
     </div>
 
     <div class="header-actions">
-      <!-- A link that has been styled to look like a button (class="btn"
-           and the outline variant). It leads to the contact page. -->
-      <a class="btn btn-outline" href="contact.html">Contact us</a>
-
       <!-- A real <button>. Its id="menuBtn" is how script.js finds it.
            aria-expanded says whether the menu it controls is open, and
            aria-controls names which element it controls (by that element's
            id). Both exist for screen readers. &#9776; is a special code that
            displays as the three-line "hamburger" icon. -->
       <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">&#9776; MENU</button>
+
+      <!-- A link that has been styled to look like a button (class="btn"
+           and the outline variant). It leads to the contact page. The order
+           of these two items in the HTML is the order they appear on screen,
+           left to right, because the container lays them out in a row. -->
+      <a class="btn btn-outline" href="contact.html">Contact us</a>
     </div>
   </header>
 
