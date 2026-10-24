@@ -54,7 +54,7 @@
    ========================================================================== */
 :root {
   --bg: #013741;        /* page background: a deep teal-blue */
-  --bg-alt: #0c1c2e;    /* slightly lighter navy, for boxes that sit on the page */
+  --bg-alt: #026274;    /* slightly lighter navy, for boxes that sit on the page */
   --text: #e8f1f8;      /* main text colour: a soft off-white with a blue tint */
   --muted: #9bb0c3;     /* dimmer grey-blue for secondary text */
   --accent: #2fd0c4;    /* the highlight colour: a bright teal */
