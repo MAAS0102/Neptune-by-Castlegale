@@ -162,3 +162,129 @@
      ()  calls the function immediately, so everything above runs once as
          soon as the page loads */
 })();
+
+
+/* ==========================================================================
+   Extra behaviour for the other pages
+   ==========================================================================
+   Each block below is wrapped in its own (function () { ... })(); like the
+   menu code above, so its variables stay private. Each one first looks for
+   its elements, and does nothing if the page does not have them, so this one
+   file can be shared by every page.
+   ========================================================================== */
+
+
+/* --------------------------------------------------------------------------
+   1. Switch on the "js" marker
+   --------------------------------------------------------------------------
+   document.documentElement is the <html> element, the top of the page.
+   .classList.add('js') gives it class="js". The CSS rules that start with
+   ".js" (the scroll-in animation) therefore apply only when JavaScript is
+   running, so nothing stays invisible if the script fails to load.
+   -------------------------------------------------------------------------- */
+(function () {
+  document.documentElement.classList.add('js');
+})();
+
+
+/* --------------------------------------------------------------------------
+   2. Scroll-in animation (the "pop out as you scroll" effect)
+   --------------------------------------------------------------------------
+   querySelectorAll('.reveal') returns a list of every element with
+   class="reveal" (like a Python list). IntersectionObserver is a built-in
+   browser tool that calls a function whenever an element enters or leaves
+   the visible part of the window. When one enters, we add the class
+   "is-visible", which the CSS turns into a fade-and-slide, and then stop
+   watching that element so the effect only plays once.
+   -------------------------------------------------------------------------- */
+(function () {
+  var items = document.querySelectorAll('.reveal');
+  if (!items.length) return;                 // no such elements on this page
+
+  /* Very old browsers have no IntersectionObserver. Just show everything. */
+  if (!('IntersectionObserver' in window)) {
+    items.forEach(function (el) { el.classList.add('is-visible'); });
+    return;
+  }
+
+  /* "entries" is a list of reports, one per element that changed.
+     isIntersecting is true when the element is on screen.
+     threshold 0.15 means "count it as visible once 15% of it is showing". */
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        observer.unobserve(entry.target);    // stop watching this one
+      }
+    });
+  }, { threshold: 0.15 });
+
+  items.forEach(function (el) { observer.observe(el); });
+})();
+
+
+/* --------------------------------------------------------------------------
+   3. Carousels (the NEXT > buttons)
+   --------------------------------------------------------------------------
+   Each carousel in the HTML is a box with class "carousel", holding a
+   sideways-scrolling strip ("slides") and a NEXT button. Clicking NEXT
+   scrolls the strip left by one strip-width, which brings the next slide
+   into view. After the last slide it goes back to the first.
+   -------------------------------------------------------------------------- */
+(function () {
+  document.querySelectorAll('.carousel').forEach(function (box) {
+    /* box.querySelector finds the first matching element INSIDE this box. */
+    var strip = box.querySelector('.slides');
+    var next = box.querySelector('.carousel-next');
+    if (!strip || !next) return;
+
+    next.addEventListener('click', function () {
+      /* scrollLeft is how far the strip is scrolled, clientWidth is its
+         visible width and scrollWidth is its full length. When
+         scrollLeft + clientWidth reaches scrollWidth, we are at the end.
+         The "- 4" allows for tiny rounding differences. */
+      var atEnd = strip.scrollLeft + strip.clientWidth >= strip.scrollWidth - 4;
+      if (atEnd) {
+        strip.scrollTo({ left: 0 });                        // back to the start
+      } else {
+        strip.scrollBy({ left: strip.clientWidth });        // one slide to the right
+      }
+    });
+  });
+})();
+
+
+/* --------------------------------------------------------------------------
+   4. The contact form
+   --------------------------------------------------------------------------
+   This site has no server, so the form cannot send anything itself.
+   Instead, when it is submitted we build a "mailto:" link from what the
+   visitor typed and open it, which starts a new email in their email
+   program, already filled in and addressed to us. The visitor presses send.
+
+   e.preventDefault() stops the browser's normal form submission.
+   encodeURIComponent() converts text so it is safe inside a web address (for
+   example a space becomes %20). "\n" is a new line, like in Python.
+   -------------------------------------------------------------------------- */
+(function () {
+  var form = document.getElementById('contactForm');
+  if (!form) return;
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = form.elements['name'].value;
+    var email = form.elements['email'].value;
+    var company = form.elements['company'].value;
+    var message = form.elements['message'].value;
+
+    var subject = 'Neptune enquiry from ' + name;
+    var body = 'Name: ' + name + '\n' +
+               'Email: ' + email + '\n' +
+               'Company / plant: ' + company + '\n\n' +
+               message;
+
+    window.location.href = 'mailto:info@castlegale.com' +
+      '?subject=' + encodeURIComponent(subject) +
+      '&body=' + encodeURIComponent(body);
+  });
+})();

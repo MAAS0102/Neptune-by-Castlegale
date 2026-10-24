@@ -656,6 +656,257 @@ main section {
 
 
 /* ==========================================================================
+   6B. THE OTHER PAGES (Why Neptune, Features, Our team, Contact us)
+   ==========================================================================
+   Everything below is used only by the four extra pages. They share the
+   header, footer, colours and buttons defined above, so only the new
+   building blocks need styling here.
+   ========================================================================== */
+
+/* A <button> element does not look like a link-style ".btn" on its own,
+   because browsers give buttons their own grey background, font and text
+   colour. These four lines make a button look the same as the link buttons
+   used elsewhere. */
+button.btn {
+  background: none;
+  color: inherit;              /* "inherit" means: use whatever the parent element uses */
+  font-family: inherit;
+  cursor: pointer;
+}
+
+/* A row of buttons that sits in the middle of the page and wraps onto a
+   second line if the screen is too narrow for both. */
+.btn-row { display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin-top: 24px; }
+
+/* A small standalone heading style: the page sections on these pages are
+   centred and share the same look as the home page headings. */
+.centered { text-align: center; }
+.centered > p { color: var(--muted); max-width: 40rem; margin-left: auto; margin-right: auto; }
+
+
+/* ---- Why Neptune: the three big pillars ---------------------------------- */
+
+/* One <article> per pillar. Each is a rounded box that takes up at most 720px
+   of the width. "margin: 0 0 32px" is shorthand for top, right, bottom and
+   left (the order is clockwise from the top): no margin except 32px below, to
+   space the boxes apart. */
+.pillar {
+  width: min(100%, 720px);     /* "min" picks the smaller: never wider than 720px, never wider than the screen */
+  margin: 0 0 32px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 28px;         /* rounded corners, like the boxes in the sketch */
+  background: var(--bg-alt);
+}
+
+/* "margin-left: auto" pushes a box as far right as it can go, so the pillars
+   stagger left and right down the page. */
+.pillar-right { margin-left: auto; }
+
+.pillar h2 { margin-top: 0; font-size: clamp(1.8rem, 4vw, 2.6rem); }
+
+/* The first letter of each pillar's name is bigger and coloured. Each pillar
+   sets its own --letter variable (below), and this rule reads it. */
+.pillar .big-c {
+  color: var(--letter);
+  font-family: "Poppins", system-ui, sans-serif;
+  font-size: 1.5em;            /* "em" is relative to the surrounding font size, so 1.5em is one and a half times as large */
+  line-height: 1;
+}
+.pillar-clarity { --letter: var(--magenta); }
+.pillar-control { --letter: var(--hover-yellow); }
+.pillar-compliance { --letter: var(--hover-blue); }
+
+.pillar p { color: var(--muted); }
+
+/* The scroll-in effect. The words "pop out" as you scroll down the page.
+   Elements with class="reveal" start see-through ("opacity: 0"), pushed down
+   48px and slightly shrunk. When script.js sees one scroll into view it adds
+   the class "is-visible", and the "transition" smoothly moves it to its
+   normal place and fades it in. The rule starts with ".js" so that it only
+   applies when JavaScript is running: script.js adds the class "js" to the
+   page at the start. Without that, a visitor whose JavaScript fails would
+   see empty space. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(48px) scale(.97);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.js .reveal.is-visible { opacity: 1; transform: none; }
+
+/* The boxed link to the EPA website inside the Compliance pillar. */
+.epa-link { margin-top: 8px; }
+
+
+/* ---- A band with a sentence and buttons --------------------------------- */
+.learn-band { border-top: 1px solid var(--line); text-align: center; }
+.learn-band h2 { max-width: 40rem; margin-left: auto; margin-right: auto; font-size: clamp(1.4rem, 3vw, 2rem); }
+
+
+/* ---- Carousel: a row of slides that scrolls sideways ---------------------- */
+/* ".slides" is the sliding strip. "display: flex" puts the slides side by
+   side in one long row. "overflow-x: auto" lets that row scroll sideways
+   inside its box (the visitor can also swipe it on a phone). "scroll-snap"
+   makes the scrolling stop exactly on a slide instead of in between. */
+.slides {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;     /* when script.js scrolls the strip, glide instead of jumping */
+  scrollbar-width: none;       /* hide the scrollbar (Firefox); the NEXT button replaces it */
+}
+.slides::-webkit-scrollbar { display: none; }   /* the same for Chrome and Safari */
+
+/* One slide. "flex: 0 0 100%" means: do not grow, do not shrink, and be
+   exactly 100% of the strip's width, so one slide fills the box. */
+.slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;    /* when snapping, line this slide's left edge up with the strip's left edge */
+  min-height: 320px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--bg-alt);
+}
+.slide h3 { margin-top: 0; font-size: 1.5rem; }
+.slide p { color: var(--muted); }
+
+.carousel-controls { display: flex; justify-content: flex-end; margin-top: 16px; }
+
+
+/* ---- Features: big boxes with text beside a picture ---------------------- */
+.feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px 32px;              /* row gap, then column gap */
+  align-items: center;
+  margin-bottom: 32px;
+  padding: 32px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--bg-alt);
+}
+/* The title spans both columns ("1 / -1" means from the first grid line to
+   the last), so it sits across the top of the box. */
+.feature h2 { grid-column: 1 / -1; margin: 0; }
+.feature-text p { color: var(--muted); font-size: 1.1rem; margin: 0; }
+/* Every second box swaps its sides, the same trick as the Solution section
+   on the home page. */
+.feature.reverse .feature-text { order: 1; }
+/* The picture placeholder inside a feature box is darker, so it stands out
+   from the box behind it. */
+.feature .media-box { background: var(--bg); }
+
+
+/* ---- Our team ------------------------------------------------------------ */
+.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+
+.person {
+  display: flex;
+  flex-direction: column;      /* stack name, body and qualification vertically */
+  gap: 16px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 28px;
+  background: var(--bg-alt);
+}
+.person h3 { margin: 0; font-size: 1.4rem; }
+.person-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; flex: 1; }
+.person-body p { margin: 0; color: var(--muted); }
+.person .media-box { min-height: 160px; background: var(--bg); }
+.qualification { margin: 0; color: var(--accent); font-weight: 600; }
+
+/* The "Built by Experience" bubbles. ".bubbles" is a row of circles. Each
+   bubble is 110px wide and tall. When the mouse hovers over one (or the
+   keyboard or a finger focuses it, which ":focus" handles), it grows to
+   260px and its text fades in, while the others stay small. The width and
+   height changes are animated by "transition". "border-radius: 50%" makes a
+   square into a circle. */
+.bubbles {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  min-height: 280px;           /* room for the biggest bubble so the page does not jump */
+}
+.bubble {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 110px;
+  height: 110px;
+  padding: 12px;
+  overflow: hidden;            /* hide any text that does not fit inside the circle */
+  text-align: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--bg-alt);
+  transition: width .4s ease, height .4s ease, background .4s ease;
+  cursor: pointer;
+}
+.bubble h3 { margin: 0; font-size: .9rem; }
+/* The text inside starts invisible and is only shown on hover or focus. */
+.bubble p { margin: 8px 0 0; font-size: .9rem; color: var(--muted); opacity: 0; max-height: 0; transition: opacity .4s ease; }
+.bubble:hover, .bubble:focus { width: 260px; height: 260px; background: var(--footer-bg); }
+.bubble:hover p, .bubble:focus p { opacity: 1; max-height: none; }
+
+
+/* ---- Request a quote ----------------------------------------------------- */
+.quote { border-top: 1px solid var(--line); text-align: center; }
+.quote h2 { font-size: clamp(2rem, 6vw, 4rem); letter-spacing: .06em; margin-bottom: 8px; }
+.quote p { color: var(--muted); }
+
+
+/* ---- Contact page -------------------------------------------------------- */
+.contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.contact-details p { margin: .4em 0; }
+.contact-details address { font-style: normal; }
+.contact-details a { text-underline-offset: 3px; }
+
+/* The form. Each <label> sits above its box ("display: block"). The boxes
+   fill the full width and use the page colours instead of the browser's
+   default white. "font: inherit" copies the page font into the boxes, which
+   otherwise use a smaller system font. */
+.contact-form label { display: block; margin-bottom: 16px; font-weight: 600; }
+.contact-form input,
+.contact-form textarea {
+  display: block;
+  width: 100%;
+  margin-top: 6px;
+  padding: 12px;
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+.contact-form textarea { min-height: 160px; resize: vertical; }
+
+
+/* ---- Smaller screens for the extra pages --------------------------------- */
+@media (max-width: 800px) {
+  .pillar { width: 100%; }
+  .feature, .team-grid, .person-body, .contact-layout { grid-template-columns: 1fr; }
+  .feature.reverse .feature-text { order: 0; }
+  .slide { padding: 24px; }
+  /* On a phone the grown bubble would be wider than the screen, so it is
+     capped to the screen width. */
+  .bubble:hover, .bubble:focus { width: min(260px, 80vw); height: min(260px, 80vw); }
+}
+
+/* Visitors who asked their device for less motion get no sliding in, no
+   gliding carousel and no growing animation. */
+@media (prefers-reduced-motion: reduce) {
+  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .slides { scroll-behavior: auto; }
+  .bubble, .bubble p { transition: none; }
+}
+
+
+/* ==========================================================================
    7. ACCESSIBILITY
    ========================================================================== */
 

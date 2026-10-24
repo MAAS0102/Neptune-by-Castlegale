@@ -1,0 +1,289 @@
+<!doctype html>
+<!-- ========================================================================
+     why-neptune.html: one of the extra pages. It has the same three parts as
+     index.html: a <head> (information about the page), then the header and
+     menu copied from the home page, then the content in <main>, then the
+     footer copied from the home page. The styling lives in style.css and the
+     behaviour in script.js, which every page shares.
+     ======================================================================== -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- The text on the browser tab. -->
+  <title>Why Neptune? | Neptune by Castlegale</title>
+  <meta name="description" content="Clarity, control and compliance for your waste water treatment plant.">
+  <meta property="og:title" content="Why Neptune? | Neptune by Castlegale">
+  <meta property="og:description" content="Clarity, control and compliance for your waste water treatment plant.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://neptune.castlegale.com/why-neptune.html">
+
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ======================================================================
+       HEADER: the top bar. <header> is a "semantic" tag. It behaves like a
+       plain box, but its name tells browsers and screen readers what the
+       section is for.
+       ====================================================================== -->
+  <header class="site-header">
+
+    <!-- <a> is a link. href is the destination. "/" means the site's home
+         page. aria-label gives screen readers a spoken name, because the
+         link contains only a picture and no text. -->
+    <a class="brand" href="/" aria-label="Neptune by Castlegale home">
+      <!-- <img> shows a picture from an image file. It has no closing tag.
+           src is the file's location: the "images" folder, then the file
+           name. alt is the text a screen reader speaks, and what appears if
+           the picture fails to load. This logo is a PNG with a transparent
+           background, which is why the page colour shows through around the
+           hexagon. The size is set in style.css through class="logo". -->
+      <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+    </a>
+
+    <!-- <div> is a generic container box with no meaning of its own. It is
+         used to group things so CSS can position them together. -->
+    <div class="title-block">
+      <!-- <h1> is the top-level heading. A page should have exactly one.
+           Heading tags run from h1 (most important) down to h6. -->
+      <h1 class="wordmark">NEPTUNE</h1>
+      <!-- <p> is a paragraph of text. -->
+      <p class="tagline">Your Plant, Your Way.</p>
+    </div>
+
+    <!-- The third item in the header's grid, in the right-hand column. It
+         holds only the menu button now. -->
+    <div class="header-actions">
+      <!-- A real <button>. Its id="menuBtn" is how script.js finds it.
+           aria-expanded says whether the menu it controls is open, and
+           aria-controls names which element it controls (by that element's
+           id). Both exist for screen readers. &#9776; is a special code that
+           displays as the three-line "hamburger" icon. -->
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">&#9776; MENU</button>
+    </div>
+
+    <!-- A link that has been styled to look like a button (class="btn" and
+         the outline variant). It leads to the contact page. It sits directly
+         inside the header, outside the grid's three columns, because
+         style.css pins it to the top-right corner with the class
+         "contact-btn". -->
+    <a class="btn btn-outline contact-btn" href="contact.html">Contact us</a>
+  </header>
+
+  <!-- ======================================================================
+       FULL-SCREEN MENU: the panel that covers the page when MENU is clicked.
+       <nav> marks a block of navigation links. The word "hidden" on it makes
+       the browser keep it invisible until script.js removes that attribute.
+       ====================================================================== -->
+  <nav class="menu-overlay" id="menuOverlay" aria-label="Main menu" hidden>
+    <!-- &times; displays as the multiplication sign, used as the close "x". -->
+    <button class="menu-close" id="menuClose" aria-label="Close menu">&times;</button>
+
+    <!-- <ul> is an unordered list. Each <li> is one item in it. Here every
+         item holds a link to one page of the site. -->
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="why-neptune.html">Why Neptune?</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="team.html">Our team</a></li>
+      <li><a href="contact.html">Contact us</a></li>
+    </ul>
+  </nav>
+
+  <!-- <main> wraps the content that is different on every page. -->
+  <main>
+
+    <!-- ====================================================================
+         THE THREE PILLARS: Clarity, Control, Compliance.
+         One <section> holds three <article> boxes. <article> is a tag for a
+         self-contained piece of content. Each one has two classes: "pillar"
+         (the shared look) and "reveal" (the scroll-in animation in
+         script.js and style.css). "pillar-right" pushes a box to the right
+         so the three zigzag down the page. The first letter of each name is
+         in a <span class="big-c"> so it can be larger and coloured.
+         ==================================================================== -->
+    <section class="pillars">
+      <article class="pillar pillar-clarity pillar-right reveal">
+        <h2><span class="big-c">C</span>larity</h2>
+        <p>Words about how Neptune gives you Clarity.</p>
+      </article>
+
+      <article class="pillar pillar-control reveal">
+        <h2><span class="big-c">C</span>ontrol</h2>
+        <p>Words about how Neptune gives you Control.</p>
+      </article>
+
+      <article class="pillar pillar-compliance pillar-right reveal">
+        <h2><span class="big-c">C</span>ompliance</h2>
+        <p>Words about how Neptune keeps you in Compliance.</p>
+        <!-- target="_blank" opens the link in a new tab. rel="noopener
+             noreferrer" is a safety setting that stops the opened page from
+             being able to control or learn about this one. -->
+        <a class="btn btn-outline epa-link" href="https://www.epa.ie/environment-and-you/waste-water/" target="_blank" rel="noopener noreferrer">EPA Guidelines</a>
+      </article>
+    </section>
+
+    <!-- ====================================================================
+         LEARN MORE BAND: a sentence and two buttons. "index.html#problem"
+         means "the page index.html, scrolled to the element with id=problem"
+         (the Problem section on the home page).
+         ==================================================================== -->
+    <section class="learn-band">
+      <h2>Learn why we created Neptune and how we approach modern water management</h2>
+      <div class="btn-row">
+        <a class="btn btn-outline" href="index.html#problem">The Problem &gt;</a>
+        <a class="btn btn-outline" href="team.html">Meet the team &gt;</a>
+      </div>
+    </section>
+
+    <!-- ====================================================================
+         CASE STUDIES: a carousel. The strip with class="slides" holds one
+         <div class="slide"> per case study, side by side. The NEXT button
+         is wired up in script.js. tabindex="0" lets keyboard users focus the
+         strip and scroll it with the arrow keys; aria-label gives it a name
+         for screen readers.
+         ==================================================================== -->
+    <section class="carousel-section" id="case-studies">
+      <h2>Case Studies</h2>
+      <div class="carousel">
+        <div class="slides" tabindex="0" aria-label="Case studies">
+          <div class="slide">
+            <h3>Dairy Manufactory</h3>
+            <p>Case study text goes here.</p>
+          </div>
+          <div class="slide">
+            <h3>Case study 2</h3>
+            <p>Case study text goes here.</p>
+          </div>
+          <div class="slide">
+            <h3>Case study 3</h3>
+            <p>Case study text goes here.</p>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="btn btn-outline carousel-next" type="button">Next &gt;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPERT IMPLEMENTATION: a second carousel, built the same way. -->
+    <section class="carousel-section" id="expert-implementation">
+      <h2>Expert Implementation</h2>
+      <div class="carousel">
+        <div class="slides" tabindex="0" aria-label="Expert implementation">
+          <div class="slide">
+            <h3>Constant customer service from day <u>one</u>.</h3>
+            <p>Extra info goes here.</p>
+          </div>
+          <div class="slide">
+            <h3>Extra info 2</h3>
+            <p>Extra info goes here.</p>
+          </div>
+          <div class="slide">
+            <h3>Extra info 3</h3>
+            <p>Extra info goes here.</p>
+          </div>
+        </div>
+        <div class="carousel-controls">
+          <button class="btn btn-outline carousel-next" type="button">Next &gt;</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- REQUEST A QUOTE -->
+    <section class="quote">
+      <h2>REQUEST<br>A QUOTE</h2>
+      <p>Words of conviction go here.</p>
+      <div class="btn-row">
+        <a class="btn btn-outline" href="contact.html">Contact us</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER: the bottom of the page. <footer> is another semantic tag.
+       It has two stacked parts, each in its own <div>, so that each can have
+       its own background colour in style.css:
+         1. footer-main   the lighter teal area: logo plus three columns
+                          (contact details, menu, address)
+         2. footer-bottom the thin strip at the very bottom: copyright line
+       ======================================================================== -->
+  <footer class="site-footer">
+
+    <!-- Part 1: the main footer area. -->
+    <div class="footer-main">
+      <!-- A grid of three parts side by side: the left part (logo and
+           contact details), the menu in the middle, and the address on the
+           right. Putting them side by side, not stacked, keeps the footer
+           short. style.css makes the middle part sit exactly in the centre
+           of the page, in line with the NEPTUNE title and the words above. -->
+      <div class="footer-grid">
+
+        <!-- The left part. It is a wrapper around two things that sit next
+             to each other: the logo and the contact details. -->
+        <div class="footer-left">
+
+          <!-- The logo. The same image file as in the header is shown again;
+               the browser downloads it only once and reuses it. -->
+          <div class="footer-brand">
+            <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+          </div>
+
+          <!-- Contact details. <h3> is a third-level heading. -->
+          <div class="footer-contact">
+            <h3>Contact details</h3>
+            <!-- A link whose href starts with "tel:" starts a phone call when
+                 tapped on a phone. The number inside the href has no spaces,
+                 because the phone reads that part. The text between the tags
+                 is what the visitor sees, so it can have spaces and be easier
+                 to read. -->
+            <p>Phone: <a href="tel:+353868200771">+353 86 820 0771</a></p>
+            <!-- "mailto:" opens the visitor's email program with a new message
+                 addressed to this address. -->
+            <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
+          </div>
+        </div>
+
+        <!-- The middle part: the same links as the full-screen menu.
+             <nav> marks a block of navigation links, and aria-label gives it
+             a name that screen readers can announce, to tell it apart from
+             the other menu higher up the page. -->
+        <nav class="footer-menu" aria-label="Footer menu">
+          <h3>Menu</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="why-neptune.html">Why Neptune?</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="team.html">Our team</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+        </nav>
+
+        <!-- The right part: the address. <address> is the HTML tag
+             for contact details. A <br> is a line break: it starts a new
+             line without starting a new paragraph. -->
+        <div class="footer-address">
+          <h3>Address</h3>
+          <address>
+            Castlegale Environmental Limited<br>
+            Elysium Business Centre, 2nd Floor Breffni Court, Watercourse Road<br>
+            Blackpool, Cork, T23 X02N, Ireland
+          </address>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 2: the bottom strip. &copy; displays as the copyright symbol. -->
+    <div class="footer-bottom">
+      <p class="copyright">&copy; 2026 Neptune by Castlegale</p>
+      <p class="footnote">* Data Collected Anonymously from Current Clients</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>

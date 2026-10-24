@@ -1,0 +1,215 @@
+<!doctype html>
+<!-- ========================================================================
+     contact.html: one of the extra pages. It has the same three parts as
+     index.html: a <head> (information about the page), then the header and
+     menu copied from the home page, then the content in <main>, then the
+     footer copied from the home page. The styling lives in style.css and the
+     behaviour in script.js, which every page shares.
+     ======================================================================== -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- The text on the browser tab. -->
+  <title>Contact us | Neptune by Castlegale</title>
+  <meta name="description" content="Get in touch with the Neptune team for a free consultation.">
+  <meta property="og:title" content="Contact us | Neptune by Castlegale">
+  <meta property="og:description" content="Get in touch with the Neptune team for a free consultation.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://neptune.castlegale.com/contact.html">
+
+  <link rel="icon" type="image/png" href="images/logo.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- ======================================================================
+       HEADER: the top bar. <header> is a "semantic" tag. It behaves like a
+       plain box, but its name tells browsers and screen readers what the
+       section is for.
+       ====================================================================== -->
+  <header class="site-header">
+
+    <!-- <a> is a link. href is the destination. "/" means the site's home
+         page. aria-label gives screen readers a spoken name, because the
+         link contains only a picture and no text. -->
+    <a class="brand" href="/" aria-label="Neptune by Castlegale home">
+      <!-- <img> shows a picture from an image file. It has no closing tag.
+           src is the file's location: the "images" folder, then the file
+           name. alt is the text a screen reader speaks, and what appears if
+           the picture fails to load. This logo is a PNG with a transparent
+           background, which is why the page colour shows through around the
+           hexagon. The size is set in style.css through class="logo". -->
+      <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+    </a>
+
+    <!-- <div> is a generic container box with no meaning of its own. It is
+         used to group things so CSS can position them together. -->
+    <div class="title-block">
+      <!-- <h1> is the top-level heading. A page should have exactly one.
+           Heading tags run from h1 (most important) down to h6. -->
+      <h1 class="wordmark">NEPTUNE</h1>
+      <!-- <p> is a paragraph of text. -->
+      <p class="tagline">Your Plant, Your Way.</p>
+    </div>
+
+    <!-- The third item in the header's grid, in the right-hand column. It
+         holds only the menu button now. -->
+    <div class="header-actions">
+      <!-- A real <button>. Its id="menuBtn" is how script.js finds it.
+           aria-expanded says whether the menu it controls is open, and
+           aria-controls names which element it controls (by that element's
+           id). Both exist for screen readers. &#9776; is a special code that
+           displays as the three-line "hamburger" icon. -->
+      <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="menuOverlay">&#9776; MENU</button>
+    </div>
+
+    <!-- A link that has been styled to look like a button (class="btn" and
+         the outline variant). It leads to the contact page. It sits directly
+         inside the header, outside the grid's three columns, because
+         style.css pins it to the top-right corner with the class
+         "contact-btn". -->
+    <a class="btn btn-outline contact-btn" href="contact.html">Contact us</a>
+  </header>
+
+  <!-- ======================================================================
+       FULL-SCREEN MENU: the panel that covers the page when MENU is clicked.
+       <nav> marks a block of navigation links. The word "hidden" on it makes
+       the browser keep it invisible until script.js removes that attribute.
+       ====================================================================== -->
+  <nav class="menu-overlay" id="menuOverlay" aria-label="Main menu" hidden>
+    <!-- &times; displays as the multiplication sign, used as the close "x". -->
+    <button class="menu-close" id="menuClose" aria-label="Close menu">&times;</button>
+
+    <!-- <ul> is an unordered list. Each <li> is one item in it. Here every
+         item holds a link to one page of the site. -->
+    <ul>
+      <li><a href="/">Home</a></li>
+      <li><a href="why-neptune.html">Why Neptune?</a></li>
+      <li><a href="features.html">Features</a></li>
+      <li><a href="team.html">Our team</a></li>
+      <li><a href="contact.html">Contact us</a></li>
+    </ul>
+  </nav>
+
+  <!-- <main> wraps the content that is different on every page. -->
+  <main>
+
+    <!-- ====================================================================
+         CONTACT: details on the left, a form on the right. The form has no
+         action address because script.js handles it: it opens a new email,
+         already filled in, in the visitor's email program. "id" is how
+         script.js finds the form. Each <label> wraps its box, so clicking
+         the label selects the box. "required" makes the browser refuse to
+         submit while a box is empty, and type="email" checks the address
+         looks valid.
+         ==================================================================== -->
+    <section>
+      <h2>Contact us</h2>
+      <div class="contact-layout">
+        <div class="contact-details">
+          <p>Phone: <a href="tel:+353868200771">+353 86 820 0771</a></p>
+          <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
+          <address>
+            Castlegale Environmental Limited<br>
+            Elysium Business Centre, 2nd Floor Breffni Court, Watercourse Road<br>
+            Blackpool, Cork, T23 X02N, Ireland
+          </address>
+        </div>
+
+        <form class="contact-form" id="contactForm">
+          <label>Name <input type="text" name="name" required autocomplete="name"></label>
+          <label>Email <input type="email" name="email" required autocomplete="email"></label>
+          <label>Company / plant <input type="text" name="company" autocomplete="organization"></label>
+          <label>Message <textarea name="message" required></textarea></label>
+          <button class="btn btn-outline" type="submit">Send message</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       FOOTER: the bottom of the page. <footer> is another semantic tag.
+       It has two stacked parts, each in its own <div>, so that each can have
+       its own background colour in style.css:
+         1. footer-main   the lighter teal area: logo plus three columns
+                          (contact details, menu, address)
+         2. footer-bottom the thin strip at the very bottom: copyright line
+       ======================================================================== -->
+  <footer class="site-footer">
+
+    <!-- Part 1: the main footer area. -->
+    <div class="footer-main">
+      <!-- A grid of three parts side by side: the left part (logo and
+           contact details), the menu in the middle, and the address on the
+           right. Putting them side by side, not stacked, keeps the footer
+           short. style.css makes the middle part sit exactly in the centre
+           of the page, in line with the NEPTUNE title and the words above. -->
+      <div class="footer-grid">
+
+        <!-- The left part. It is a wrapper around two things that sit next
+             to each other: the logo and the contact details. -->
+        <div class="footer-left">
+
+          <!-- The logo. The same image file as in the header is shown again;
+               the browser downloads it only once and reuses it. -->
+          <div class="footer-brand">
+            <img class="logo" src="images/logo.png" alt="Neptune by Castlegale logo">
+          </div>
+
+          <!-- Contact details. <h3> is a third-level heading. -->
+          <div class="footer-contact">
+            <h3>Contact details</h3>
+            <!-- A link whose href starts with "tel:" starts a phone call when
+                 tapped on a phone. The number inside the href has no spaces,
+                 because the phone reads that part. The text between the tags
+                 is what the visitor sees, so it can have spaces and be easier
+                 to read. -->
+            <p>Phone: <a href="tel:+353868200771">+353 86 820 0771</a></p>
+            <!-- "mailto:" opens the visitor's email program with a new message
+                 addressed to this address. -->
+            <p>Email: <a href="mailto:info@castlegale.com">info@castlegale.com</a></p>
+          </div>
+        </div>
+
+        <!-- The middle part: the same links as the full-screen menu.
+             <nav> marks a block of navigation links, and aria-label gives it
+             a name that screen readers can announce, to tell it apart from
+             the other menu higher up the page. -->
+        <nav class="footer-menu" aria-label="Footer menu">
+          <h3>Menu</h3>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="why-neptune.html">Why Neptune?</a></li>
+            <li><a href="features.html">Features</a></li>
+            <li><a href="team.html">Our team</a></li>
+            <li><a href="contact.html">Contact us</a></li>
+          </ul>
+        </nav>
+
+        <!-- The right part: the address. <address> is the HTML tag
+             for contact details. A <br> is a line break: it starts a new
+             line without starting a new paragraph. -->
+        <div class="footer-address">
+          <h3>Address</h3>
+          <address>
+            Castlegale Environmental Limited<br>
+            Elysium Business Centre, 2nd Floor Breffni Court, Watercourse Road<br>
+            Blackpool, Cork, T23 X02N, Ireland
+          </address>
+        </div>
+      </div>
+    </div>
+
+    <!-- Part 2: the bottom strip. &copy; displays as the copyright symbol. -->
+    <div class="footer-bottom">
+      <p class="copyright">&copy; 2026 Neptune by Castlegale</p>
+      <p class="footnote">* Data Collected Anonymously from Current Clients</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
