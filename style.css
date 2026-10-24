@@ -277,15 +277,31 @@ a { color: inherit; }
 .values {
   max-width: var(--max);
   margin: 0 auto;
-  padding: 8px 16px 32px;
+  padding: 8px 0 32px;         /* no side padding, so the text can use the full width of the divider line below */
   text-align: center;
   color: var(--values-text);   /* the soft teal defined at the top of the file */
   font-family: "Poppins", system-ui, sans-serif;   /* our bold font first; if it fails to load, fall back to the system font */
   font-weight: 700;
   letter-spacing: 0;           /* no extra gaps between letters: this style is tight and chunky */
-  font-size: clamp(1.5rem, 3.2vw, 2.5rem);   /* grows with the window, between 1.5rem (24px) and 2.5rem (40px) */
+  /* The sentence is about 36 times as wide as its font size, so a size of
+     2.65vw (2.65% of the window width) makes it fill roughly 95% of the
+     window, and it stops growing at 2.05rem (32.8px) because the page
+     content never gets wider than 1200px. "min" picks whichever of the two
+     is smaller. */
+  font-size: min(2.05rem, 2.65vw);
   line-height: 1.25;
-  text-wrap: balance;          /* if the sentence needs two lines, split it into two lines of similar length */
+  white-space: nowrap;         /* never break the sentence: it always stays on one line */
+}
+
+/* On small screens, one line would be too tiny to read, so below 800px the
+   sentence is allowed to wrap onto two or three lines at a readable size. */
+@media (max-width: 800px) {
+  .values {
+    white-space: normal;
+    font-size: 1.5rem;
+    text-wrap: balance;        /* split into lines of similar length */
+    padding: 8px 16px 32px;
+  }
 }
 
 
