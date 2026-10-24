@@ -204,16 +204,21 @@
       </div>
 
       <div class="hero-video">
-        <!-- TODO: replace VIDEO_ID with the YouTube/Vimeo id of the Castlegale video -->
         <div class="video-frame">
-          <p>Neptune by Castlegale video</p>
           <!-- An <iframe> embeds another web page inside this one, which is
-               how YouTube videos are added. It is commented out for now, so
-               the browser ignores it. Removing the comment markers around it
-               would switch it on. src is the address of what to embed,
-               allowfullscreen permits the full-screen button, and
-               loading="lazy" delays loading until the visitor scrolls near. -->
-          <!-- <iframe src="https://www.youtube.com/embed/VIDEO_ID" title="Neptune by Castlegale" allowfullscreen loading="lazy"></iframe> -->
+               how YouTube videos are added. The long code at the end of the
+               address, pWyIi0imxfg, is the video's ID: the part that comes
+               after "v=" in its normal YouTube link.
+               - src is the address of what to embed. The domain
+                 youtube-nocookie.com is YouTube's privacy-enhanced mode, which
+                 does not set tracking cookies until the visitor presses play.
+               - title is a description for screen readers.
+               - allow lists which browser features the video may use.
+               - allowfullscreen permits the full-screen button.
+               - referrerpolicy controls what the video's server is told about
+                 the page it sits on. This value sends only the site's name.
+               - loading="lazy" delays loading until the visitor scrolls near. -->
+          <iframe src="https://www.youtube-nocookie.com/embed/pWyIi0imxfg" title="An Introduction to Neptune" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen loading="lazy"></iframe>
         </div>
       </div>
     </section>

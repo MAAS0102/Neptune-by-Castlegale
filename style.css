@@ -383,7 +383,9 @@ main section {
   color: var(--muted);
 }
 
-/* When the real video <iframe> is added, make it fill the frame completely. */
+/* The embedded YouTube video (an <iframe>) fills the frame completely. The
+   frame keeps a 16 by 9 shape, so the video never gets squashed or stretched,
+   and "border: 0" removes the thin default border browsers draw around it. */
 .video-frame iframe { width: 100%; height: 100%; border: 0; }
 
 /* ---- Problem and Solution: text beside a picture ---- */
