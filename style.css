@@ -30,8 +30,10 @@
    of its own, only rules that describe appearance. It is closer to a
    configuration file than a program.
 
-   Comment syntax in CSS is /* ... */ and it can span many lines. There is no
-   single-line # comment like in Python.
+   A CSS comment starts with a slash and a star, and ends with a star and a
+   slash, like this whole block. It can span many lines. There is no
+   single-line # comment like in Python. (Careful: writing the ending pair of
+   characters inside a comment would end it early and break the file.)
    ========================================================================== */
 
 
