@@ -51,7 +51,7 @@
    very dark navy.
    ========================================================================== */
 :root {
-  --bg: #07121f;        /* page background: the darkest navy */
+  --bg: #004D59;        /* page background: a deep teal-blue */
   --bg-alt: #0c1c2e;    /* slightly lighter navy, for boxes that sit on the page */
   --text: #e8f1f8;      /* main text colour: a soft off-white with a blue tint */
   --muted: #9bb0c3;     /* dimmer grey-blue for secondary text */
