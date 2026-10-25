@@ -719,20 +719,32 @@ button.btn {
 
 .pillar p { color: var(--muted); }
 
-/* The scroll-in effect. The words "pop out" as you scroll down the page.
-   Elements with class="reveal" start see-through ("opacity: 0"), pushed down
-   48px and slightly shrunk. When script.js sees one scroll into view it adds
-   the class "is-visible", and the "transition" smoothly moves it to its
-   normal place and fades it in. The rule starts with ".js" so that it only
-   applies when JavaScript is running: script.js adds the class "js" to the
-   page at the start. Without that, a visitor whose JavaScript fails would
-   see empty space. */
-.js .reveal {
-  opacity: 0;
-  transform: translateY(48px) scale(.97);
-  transition: opacity .7s ease, transform .7s ease;
+/* The slide-in effect, like the product pages on apple.com. Each pillar
+   has the class "slide-in" and also "pillar-left" or "pillar-right".
+   script.js works out, as you scroll, how far the box has travelled up the
+   screen, and stores it as a number between 0 (just entering at the bottom)
+   and 1 (fully arrived) in the CSS variable --p on that box. The rule below
+   uses that number in two ways:
+     - opacity: var(--p)  fades the box in as --p goes from 0 to 1
+     - translateX(...)    moves it sideways. At --p = 0 the shift is 70% of
+       the screen width, at --p = 1 it is zero, so the box slides into its
+       place. --dir is +1 for boxes coming from the right and -1 for boxes
+       coming from the left, so multiplying by it flips the direction.
+   calc() lets CSS do that arithmetic. The rule starts with ".js" so that it
+   only applies when JavaScript is running; otherwise the boxes would stay
+   invisible. */
+.pillar-right { --dir: 1; }
+.pillar-left { --dir: -1; }
+.js .slide-in {
+  --p: 0;
+  opacity: var(--p);
+  transform: translateX(calc((1 - var(--p)) * var(--dir) * 70vw));
 }
-.js .reveal.is-visible { opacity: 1; transform: none; }
+
+/* The boxes start far off to the side, which could make the page scroll
+   sideways. "overflow-x: clip" cuts off anything poking out of the left or
+   right edge of <main>, so no sideways scrollbar appears. */
+main { overflow-x: clip; }
 
 /* The boxed link to the EPA website inside the Compliance pillar. */
 .epa-link { margin-top: 8px; }
@@ -800,58 +812,117 @@ button.btn {
 
 
 /* ---- Our team ------------------------------------------------------------ */
+
+/* The big headings "Led by Science", "Built by Experience" and "The Team".
+   They are very large and underlined. "text-decoration-thickness" and
+   "text-underline-offset" control how thick the underline is and how far
+   below the letters it sits (em is relative to the font size, so both scale
+   with the heading). */
+.team-title {
+  margin: 0 0 24px;
+  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+  line-height: 1.1;
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: .06em;
+  text-underline-offset: .15em;
+}
+/* "Built by Experience" is pushed to the right-hand side. */
+.team-title-right { margin: 24px 0 0; text-align: right; }
+
+/* The four people sit in a grid of two columns and two rows. The two heading
+   lines above and below it "hug" the grid between them. */
 .team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 
+/* One person's bubble. At rest it is a narrow box (280px) holding just the
+   name, the photo and the qualification. Hovering over it (or tapping it, or
+   selecting it with the keyboard, which ":focus" handles) makes it grow
+   sideways until it fills its grid cell, which uncovers the text about the
+   person in the new part. "overflow: hidden" hides the part of the bubble
+   that is still outside the box while it is growing, and "transition"
+   animates the width change over half a second. */
 .person {
   display: flex;
-  flex-direction: column;      /* stack name, body and qualification vertically */
-  gap: 16px;
-  padding: 24px;
+  width: 280px;
+  height: 320px;
+  overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 28px;
+  border-radius: 48px;
   background: var(--bg-alt);
+  transition: width .5s ease, background .5s ease;
+  cursor: pointer;
 }
-.person h3 { margin: 0; font-size: 1.4rem; }
-.person-body { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: center; flex: 1; }
-.person-body p { margin: 0; color: var(--muted); }
-.person .media-box { min-height: 160px; background: var(--bg); }
-.qualification { margin: 0; color: var(--accent); font-weight: 600; }
 
-/* The "Built by Experience" bubbles. ".bubbles" is a row of circles. Each
-   bubble is 110px wide and tall. When the mouse hovers over one (or the
-   keyboard or a finger focuses it, which ":focus" handles), it grows to
-   260px and its text fades in, while the others stay small. The width and
-   height changes are animated by "transition". "border-radius: 50%" makes a
-   square into a circle. */
-.bubbles {
-  display: flex;
-  gap: 16px;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  min-height: 280px;           /* room for the biggest bubble so the page does not jump */
-}
-.bubble {
+/* The bubbles in the first column (the 1st and 3rd person, "odd" ones) sit
+   against the right-hand edge of their cell, which is the centre of the
+   page, and their text part goes on the LEFT, so they grow towards the left.
+   "row-reverse" lays a flex row out right to left. "justify-self: end" pins
+   the bubble to the end (right) of its grid cell. The second column (the
+   "even" bubbles) does the opposite: pinned to the left edge of its cell,
+   which is also the centre of the page, growing to the right. Either way the
+   photos stay in the middle of the page and only the far side moves. */
+.person:nth-child(odd) { justify-self: end; flex-direction: row-reverse; }
+.person:nth-child(even) { justify-self: start; }
+
+/* On hover, focus, or tap, grow to the full width of the grid cell and
+   lighten the background a little. */
+.person:hover, .person:focus { width: 100%; background: var(--footer-bg); }
+
+/* The fixed part: name above, photo in the middle, qualification below.
+   "flex: 0 0 278px" means do not grow, do not shrink, and always be 278px
+   wide. "justify-content: space-between" spreads the three things from the
+   top to the bottom of the box. */
+.person-main {
+  flex: 0 0 278px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  width: 110px;
-  height: 110px;
-  padding: 12px;
-  overflow: hidden;            /* hide any text that does not fit inside the circle */
+  justify-content: space-between;
+  padding: 20px;
   text-align: center;
-  border: 1px solid var(--line);
-  border-radius: 50%;
-  background: var(--bg-alt);
-  transition: width .4s ease, height .4s ease, background .4s ease;
-  cursor: pointer;
 }
-.bubble h3 { margin: 0; font-size: .9rem; }
-/* The text inside starts invisible and is only shown on hover or focus. */
-.bubble p { margin: 8px 0 0; font-size: .9rem; color: var(--muted); opacity: 0; max-height: 0; transition: opacity .4s ease; }
-.bubble:hover, .bubble:focus { width: 260px; height: 260px; background: var(--footer-bg); }
-.bubble:hover p, .bubble:focus p { opacity: 1; max-height: none; }
+.person-main h3 { margin: 0; font-size: 1.25rem; }
+
+/* The photo space is a circle: border-radius 50% turns a square into one. */
+.person-photo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 170px;
+  height: 170px;
+  border: 1px dashed var(--line);
+  border-radius: 50%;
+  background: var(--bg);
+  color: var(--muted);
+}
+/* min-height reserves room for two lines, so every photo sits at the same height even when one qualification wraps onto a second line. */
+.qualification { margin: 0; min-height: 2.8em; color: var(--accent); font-weight: 600; }
+
+/* The part that is revealed: it takes up all the remaining width. It starts
+   invisible ("opacity: 0") and fades in a moment after the bubble starts to
+   grow ("transition-delay"), so the text does not appear squashed. */
+.person-text {
+  flex: 1 1 auto;
+  min-width: 260px;            /* keeps the text from being squeezed while the bubble is still narrow */
+  display: flex;
+  align-items: center;
+  padding: 32px;
+  opacity: 0;
+  transition: opacity .3s ease;
+}
+.person-text p { margin: 0; color: var(--muted); font-size: 1.1rem; }
+.person:hover .person-text, .person:focus .person-text { opacity: 1; transition-delay: .25s; }
+
+/* The big bubble under the "The Team" heading. */
+.team-bubble {
+  min-height: 320px;
+  padding: 48px;
+  border: 1px solid var(--line);
+  border-radius: 64px;
+  background: var(--bg-alt);
+}
+.team-bubble p { max-width: 50rem; font-size: 1.2rem; color: var(--muted); }
+.team-bubble a { color: var(--text); text-underline-offset: 3px; }
 
 
 /* ---- Request a quote ----------------------------------------------------- */
@@ -889,20 +960,34 @@ button.btn {
 /* ---- Smaller screens for the extra pages --------------------------------- */
 @media (max-width: 800px) {
   .pillar { width: 100%; }
-  .feature, .team-grid, .person-body, .contact-layout { grid-template-columns: 1fr; }
+  .feature, .team-grid, .contact-layout { grid-template-columns: 1fr; }
   .feature.reverse .feature-text { order: 0; }
   .slide { padding: 24px; }
-  /* On a phone the grown bubble would be wider than the screen, so it is
-     capped to the screen width. */
-  .bubble:hover, .bubble:focus { width: min(260px, 80vw); height: min(260px, 80vw); }
+  /* On a phone there is no room for a bubble to grow sideways, so every
+     person's bubble is full width, stacked top to bottom, with the text
+     always showing underneath the photo. */
+  .team-grid { grid-template-columns: 1fr; }
+  .person, .person:nth-child(odd), .person:nth-child(even) {
+    width: 100%;
+    height: auto;
+    flex-direction: column;
+    justify-self: stretch;
+  }
+  .person-main { flex: none; }
+  .person-main h3 { margin-bottom: 12px; }
+  .person-photo { margin-bottom: 12px; }
+  .person-text { opacity: 1; min-width: 0; padding: 0 24px 24px; }
+  .team-title-right { text-align: left; }
+  .team-bubble { padding: 28px; border-radius: 36px; }
+
 }
 
 /* Visitors who asked their device for less motion get no sliding in, no
    gliding carousel and no growing animation. */
 @media (prefers-reduced-motion: reduce) {
-  .js .reveal { opacity: 1; transform: none; transition: none; }
+  .js .slide-in { opacity: 1; transform: none; }
   .slides { scroll-behavior: auto; }
-  .bubble, .bubble p { transition: none; }
+  .person, .person-text { transition: none; }
 }
 
 

@@ -188,38 +188,58 @@
 
 
 /* --------------------------------------------------------------------------
-   2. Scroll-in animation (the "pop out as you scroll" effect)
+   2. Slide-in as you scroll (the three pillars on the Why Neptune page)
    --------------------------------------------------------------------------
-   querySelectorAll('.reveal') returns a list of every element with
-   class="reveal" (like a Python list). IntersectionObserver is a built-in
-   browser tool that calls a function whenever an element enters or leaves
-   the visible part of the window. When one enters, we add the class
-   "is-visible", which the CSS turns into a fade-and-slide, and then stop
-   watching that element so the effect only plays once.
+   Every element with class="slide-in" gets a number called --p (a CSS
+   variable) that goes from 0 to 1 as the visitor scrolls it up the screen.
+   style.css turns that number into a sideways movement and a fade, so the
+   box slides in from the left or right edge in step with the scrolling.
+
+   How the number is worked out, for one box:
+     - getBoundingClientRect().top is the distance in pixels from the top of
+       the window to the top of the box. It is the window height when the box
+       is just about to enter at the bottom, and gets smaller as the page
+       scrolls.
+     - (windowHeight - top) is how far the box has come up from the bottom.
+     - dividing that by (windowHeight * 0.45) says "the box has fully arrived
+       once it has travelled up 45% of the window height".
+     - Math.min(1, Math.max(0, x)) squeezes the result into the range 0 to 1,
+       like Python's min(1, max(0, x)).
+     - p * (2 - p) is an "ease-out" curve: fast at first, gently slowing
+       down at the end, which looks more natural than a straight line.
    -------------------------------------------------------------------------- */
 (function () {
-  var items = document.querySelectorAll('.reveal');
+  var items = document.querySelectorAll('.slide-in');
   if (!items.length) return;                 // no such elements on this page
 
-  /* Very old browsers have no IntersectionObserver. Just show everything. */
-  if (!('IntersectionObserver' in window)) {
-    items.forEach(function (el) { el.classList.add('is-visible'); });
-    return;
+  /* Visitors who asked their device for less motion see the boxes at rest. */
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function update() {
+    var h = window.innerHeight;
+    items.forEach(function (el) {
+      var p = 1;
+      if (!calm) {
+        var top = el.getBoundingClientRect().top;
+        p = Math.min(1, Math.max(0, (h - top) / (h * 0.45)));
+        p = p * (2 - p);
+      }
+      el.style.setProperty('--p', p);        // hand the number to the CSS
+    });
   }
 
-  /* "entries" is a list of reports, one per element that changed.
-     isIntersecting is true when the element is on screen.
-     threshold 0.15 means "count it as visible once 15% of it is showing". */
-  var observer = new IntersectionObserver(function (entries) {
-    entries.forEach(function (entry) {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        observer.unobserve(entry.target);    // stop watching this one
-      }
-    });
-  }, { threshold: 0.15 });
-
-  items.forEach(function (el) { observer.observe(el); });
+  /* Run once now, then again whenever the page scrolls or the window is
+     resized. requestAnimationFrame asks the browser to run the function just
+     before it next draws the screen, so it is not run more often than needed. */
+  var waiting = false;
+  function onScroll() {
+    if (waiting) return;
+    waiting = true;
+    window.requestAnimationFrame(function () { waiting = false; update(); });
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', onScroll);
+  update();
 })();
 
 

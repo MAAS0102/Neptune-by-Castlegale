@@ -97,66 +97,65 @@
   <!-- <main> wraps the content that is different on every page. -->
   <main>
 
-    <!-- LED BY SCIENCE: four cards in a two-by-two grid. -->
-    <section>
-      <h2>Led by Science</h2>
-      <div class="team-grid">
-        <article class="person">
-          <h3>Finbarr Pyne</h3>
-          <div class="person-body">
-            <div class="media-box"><p>Photo</p></div>
-            <p>Text space: a short bio goes here.</p>
-          </div>
-          <p class="qualification">BSc Chemistry</p>
-        </article>
-        <article class="person">
-          <h3>Declan Costigan</h3>
-          <div class="person-body">
-            <div class="media-box"><p>Photo</p></div>
-            <p>Text space: a short bio goes here.</p>
-          </div>
-          <p class="qualification">Postgraduate Environmental Science</p>
-        </article>
-        <article class="person">
-          <h3>Matylda Supernak</h3>
-          <div class="person-body">
-            <div class="media-box"><p>Photo</p></div>
-            <p>Text space: a short bio goes here.</p>
-          </div>
-          <p class="qualification">BSc Physics</p>
-        </article>
-        <article class="person">
-          <h3>Tom Hurley</h3>
-          <div class="person-body">
-            <div class="media-box"><p>Photo</p></div>
-            <p>Text space: a short bio goes here.</p>
-          </div>
-          <p class="qualification">MSc, BSc Biochemistry</p>
-        </article>
-      </div>
-    </section>
-
     <!-- ====================================================================
-         BUILT BY EXPERIENCE: a row of bubbles. Each bubble grows and shows
-         its text while the mouse is over it (or when it is tapped or
-         selected with the keyboard). tabindex="0" is what lets a bubble be
-         selected by keyboard or touch. The growing is done by CSS only.
+         LED BY SCIENCE / BUILT BY EXPERIENCE. The two big underlined
+         headings hug the grid of four people between them: the first sits
+         above the grid on the left, the second below it on the right.
+         Each person is an <article class="person">. It starts as a narrow
+         bubble showing the name, a photo space and the qualification
+         (class "person-main"), next to a hidden text part (class
+         "person-text"). When the mouse is over the bubble, or it is tapped,
+         or selected with the keyboard (tabindex="0" is what allows a tap or
+         keyboard selection), style.css makes it grow sideways and reveals
+         the text. The 1st and 3rd bubbles grow to the left and the 2nd and
+         4th to the right, so the photos stay near the middle of the page.
          ==================================================================== -->
     <section>
-      <h2>Built by Experience</h2>
-      <div class="bubbles">
-        <div class="bubble" tabindex="0"><h3>Experience 1</h3><p>Text goes here.</p></div>
-        <div class="bubble" tabindex="0"><h3>Experience 2</h3><p>Text goes here.</p></div>
-        <div class="bubble" tabindex="0"><h3>Experience 3</h3><p>Text goes here.</p></div>
-        <div class="bubble" tabindex="0"><h3>Experience 4</h3><p>Text goes here.</p></div>
+      <h2 class="team-title">Led by Science</h2>
+      <div class="team-grid">
+        <article class="person" tabindex="0">
+          <div class="person-main">
+            <h3>Finbarr Pyne</h3>
+            <div class="person-photo">Photo</div>
+            <p class="qualification">BSc Chemistry</p>
+          </div>
+          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
+        </article>
+        <article class="person" tabindex="0">
+          <div class="person-main">
+            <h3>Declan Costigan</h3>
+            <div class="person-photo">Photo</div>
+            <p class="qualification">Postgraduate Environmental Science</p>
+          </div>
+          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
+        </article>
+        <article class="person" tabindex="0">
+          <div class="person-main">
+            <h3>Matylda Supernak</h3>
+            <div class="person-photo">Photo</div>
+            <p class="qualification">BSc Physics</p>
+          </div>
+          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
+        </article>
+        <article class="person" tabindex="0">
+          <div class="person-main">
+            <h3>Tom Hurley</h3>
+            <div class="person-photo">Photo</div>
+            <p class="qualification">MSc, BSc Biochemistry</p>
+          </div>
+          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
+        </article>
       </div>
+      <h2 class="team-title team-title-right">Built by Experience</h2>
     </section>
 
-    <!-- THE TEAM -->
+    <!-- THE TEAM: a heading with one large rounded box under it. -->
     <section>
-      <h2>The Team</h2>
-      <p>Neptune was started by <a href="https://castlegale.com" target="_blank" rel="noopener noreferrer">Castlegale Environmental</a>.</p>
-      <p>More text goes here.</p>
+      <h2 class="team-title">The Team</h2>
+      <div class="team-bubble">
+        <p>Neptune was started by <a href="https://castlegale.com" target="_blank" rel="noopener noreferrer">Castlegale Environmental</a>.</p>
+        <p>More text goes here.</p>
+      </div>
     </section>
   </main>
 
