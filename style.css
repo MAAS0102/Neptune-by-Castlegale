@@ -992,6 +992,199 @@ main { overflow-x: clip; }
 
 
 /* ==========================================================================
+   6C. ANIMATIONS
+   ==========================================================================
+   Two kinds of animation live here.
+
+   A) "Appear when scrolled into view" animations (rise, drop, slide from the
+      left or right, pop, spin, fade). Which element gets which one is
+      decided by the ANIMATION LIST at the bottom of script.js, one line per
+      element. To remove one of these from one part of the site, delete that
+      line in the list. Nothing in this CSS or the HTML has to change.
+      To remove ALL of them, delete section 5 of script.js.
+
+   B) Effects that need no JavaScript (the drifting water, the lifting
+      buttons, and so on). Each one is its own block below, headed with
+      "ANIMATION:" and a note saying exactly what to delete to remove it.
+
+   How A) works: script.js gives each chosen element the class "anim" plus
+   one effect class such as "anim-rise". While the element is off screen it
+   is invisible. When it scrolls into view script.js adds the class
+   "in-view", and the CSS below plays the effect once.
+
+   An animation is described in two parts: a @keyframes block, which says
+   what the element looks like at the start (and optionally at points along
+   the way), and an "animation:" line on a rule, which says which keyframes
+   to play, for how long, and after what delay. "backwards" makes the element
+   take on the first keyframe during the delay, so it does not flash into
+   view before its turn. When the animation finishes the element simply goes
+   back to its normal style.
+   ========================================================================== */
+
+/* Elements that script.js has chosen are hidden until they scroll into view.
+   The selector starts with ".js" so this only happens when JavaScript runs;
+   without it everything stays visible. */
+.js .anim { opacity: 0; }
+
+/* Once in view: show the element and play its effect. "--anim" holds the
+   name of the keyframes and "--delay" an optional wait before starting. Both
+   are variables set below and by script.js. */
+.js .anim.in-view {
+  opacity: 1;
+  animation: var(--anim) .7s ease-out var(--delay, 0s) backwards;
+}
+
+/* Each effect class only has to say which keyframes it uses. */
+.anim-rise  { --anim: anim-rise; }
+.anim-drop  { --anim: anim-drop; }
+.anim-left  { --anim: anim-left; }
+.anim-right { --anim: anim-right; }
+.anim-pop   { --anim: anim-pop; }
+.anim-spin  { --anim: anim-spin; }
+.anim-fade  { --anim: anim-fade; }
+
+@keyframes anim-rise  { from { opacity: 0; transform: translateY(40px); } }     /* starts 40px lower and see-through */
+@keyframes anim-drop  { from { opacity: 0; transform: translateY(-40px); } }    /* starts 40px higher */
+@keyframes anim-left  { from { opacity: 0; transform: translateX(-80px); } }    /* starts to the left */
+@keyframes anim-right { from { opacity: 0; transform: translateX(80px); } }     /* starts to the right */
+@keyframes anim-fade  { from { opacity: 0; } }                                   /* just fades in */
+@keyframes anim-spin  { from { opacity: 0; transform: rotate(-180deg) scale(.4); } }   /* turns half a circle while growing */
+/* "pop" has three stops: small and invisible, then slightly too big at 70%
+   of the way, then settling at normal size, which gives a little bounce. */
+@keyframes anim-pop {
+  0%   { opacity: 0; transform: scale(.7); }
+  70%  { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* Transforms such as moving and scaling do not work on plain inline text
+   (a <span> inside a line). "inline-block" makes the span behave like a small
+   box that sits in the line, so it can be moved. This is needed for the big
+   coloured C's and for the separate letters of NEPTUNE. */
+.big-c, .letter { display: inline-block; }
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: buttons lift when you point at them.
+   To remove: delete this whole block.
+   -------------------------------------------------------------------------- */
+.btn { transition: transform .2s ease, background .2s ease, color .2s ease, border-color .2s ease; }
+.btn:hover, .btn:focus-visible { transform: translateY(-3px); }
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: the full-screen menu links slide up one after another when the
+   menu opens. ":not([hidden])" means "while the menu is showing". Each item
+   waits a little longer than the one before (the delay grows by .07s).
+   To remove: delete this whole block.
+   -------------------------------------------------------------------------- */
+.menu-overlay:not([hidden]) li { animation: anim-rise .5s ease-out backwards; }
+.menu-overlay li:nth-child(2) { animation-delay: .07s; }
+.menu-overlay li:nth-child(3) { animation-delay: .14s; }
+.menu-overlay li:nth-child(4) { animation-delay: .21s; }
+.menu-overlay li:nth-child(5) { animation-delay: .28s; }
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: a FAQ answer glides down when its question is opened. The
+   browser adds the attribute "open" to the <details> element, and "> p"
+   means the answer paragraph directly inside it.
+   To remove: delete this whole block (the @keyframes line too).
+   -------------------------------------------------------------------------- */
+.faq details[open] > p { animation: faq-open .4s ease-out; }
+@keyframes faq-open { from { opacity: 0; transform: translateY(-10px); } }
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: the water band slowly drifts, like moving water. The gradient
+   is made twice as tall as the band ("220%"), and the animation moves it up
+   and down forever ("infinite") and back again ("alternate") over 14 seconds.
+   To remove: delete this whole block. The band then goes back to its
+   original still gradient.
+   -------------------------------------------------------------------------- */
+.water-band { background-size: 100% 220%; animation: water-drift 14s ease-in-out infinite alternate; }
+@keyframes water-drift {
+  from { background-position: 50% 0%; }
+  to   { background-position: 50% 100%; }
+}
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: the big team headings have their underline drawn across from
+   one side. The normal underline is switched off and replaced by a teal
+   stripe (a background image 0.06em tall) that grows from 0 to the full
+   width when the heading scrolls into view (the "in-view" class from
+   script.js). "fit-content" makes the heading only as wide as its text, so
+   the stripe is only as long as the words.
+   To remove: delete this whole block. The plain underline comes back.
+   -------------------------------------------------------------------------- */
+.js .team-title {
+  text-decoration: none;
+  width: fit-content;
+  padding-bottom: .1em;
+  background: linear-gradient(var(--accent), var(--accent)) no-repeat left bottom / 0 .06em;
+  transition: background-size 1s ease .3s;
+}
+.js .team-title.in-view { background-size: 100% .06em; }
+/* "Built by Experience" sits on the right and its underline grows from the
+   right-hand end. */
+.js .team-title-right { margin-left: auto; background-position: right bottom; }
+@media (max-width: 800px) { .js .team-title-right { margin-left: 0; } }
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: a short teal bar is drawn under each Features title. It is an
+   extra piece of content made with "::after", and it grows from 0 to 80px
+   wide when its box scrolls into view.
+   To remove: delete this whole block.
+   -------------------------------------------------------------------------- */
+.js .feature h2::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 3px;
+  margin-top: 8px;
+  background: var(--accent);
+  transition: width .8s ease .4s;
+}
+.js .feature.in-view h2::after { width: 80px; }
+
+
+/* --------------------------------------------------------------------------
+   ANIMATION: carousel slides fade and shrink a little while they are not in
+   the middle of the strip, so the sliding looks smoother. "animation-timeline:
+   view(inline)" ties the animation to the slide's position in the sideways
+   scrolling strip instead of to time. Not every browser supports that yet;
+   "@supports" makes the rule apply only where it works, and elsewhere the
+   slides just slide normally.
+   To remove: delete this whole block.
+   -------------------------------------------------------------------------- */
+@supports (animation-timeline: view()) {
+  .slide { animation: slide-focus linear both; animation-timeline: view(inline); }
+}
+@keyframes slide-focus {
+  0%   { opacity: .2; transform: scale(.92); }
+  50%  { opacity: 1; transform: none; }
+  100% { opacity: .2; transform: scale(.92); }
+}
+
+
+/* --------------------------------------------------------------------------
+   Visitors who asked their device for less motion get none of the above: the
+   elements are shown at once, and the water stays still.
+   -------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .js .anim { opacity: 1; }
+  .js .anim.in-view, .menu-overlay:not([hidden]) li, .faq details[open] > p, .slide { animation: none; }
+  .water-band { animation: none; }
+  .js .team-title, .js .feature h2::after, .btn { transition: none; }
+  .js .team-title { background-size: 100% .06em; }
+  .js .feature h2::after { width: 80px; }
+  .btn:hover, .btn:focus-visible { transform: none; }
+}
+
+
+/* ==========================================================================
    7. ACCESSIBILITY
    ========================================================================== */
 

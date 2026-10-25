@@ -308,3 +308,167 @@
       '&body=' + encodeURIComponent(body);
   });
 })();
+
+
+/* --------------------------------------------------------------------------
+   5. THE ANIMATION LIST: which things animate when they scroll into view
+   --------------------------------------------------------------------------
+   Each line below is one animation, written as a Python-style list:
+
+       [ 'which elements', 'effect', stagger, extra delay in seconds ],
+
+   - 'which elements' is a CSS selector, the same kind used in style.css
+     (".hero h2" means every <h2> inside an element with class="hero").
+   - 'effect' is one of:
+       rise   comes up from below        drop   comes down from above
+       left   slides in from the left    right  slides in from the right
+       pop    grows with a little bounce spin   turns while growing
+       fade   just fades in
+   - stagger (true or false, optional): when several matching elements share
+     the same parent (for example the three footer columns), true makes them
+     arrive one after another, 0.1 seconds apart, instead of all together.
+   - the last number (optional) is an extra wait in seconds before it starts.
+
+   TO REMOVE AN ANIMATION from one part of the site, delete its line. TO
+   CHANGE IT, change the effect word. To remove every one of these scroll
+   animations at once, delete this whole section 5 (everything from the
+   comment above down to the end of the file). Each animation plays once only.
+
+   Animations that need no JavaScript (the drifting water, buttons that lift,
+   the menu items, the FAQ answers) are in style.css, section 6C, each marked
+   with how to remove it.
+   -------------------------------------------------------------------------- */
+(function () {
+
+  var ANIMATIONS = [
+    /* --- Header: plays as soon as the page loads --- */
+    ['.site-header .logo', 'drop'],                              // the logo drops in
+    ['.wordmark', 'letters'],                                    // NEPTUNE appears one letter at a time (special effect, see below)
+    ['.tagline', 'rise', false, 0.7],                            // "Your Plant, Your Way." rises after the letters
+    ['.menu-btn', 'fade', false, 0.5],                           // the MENU button fades in
+    ['.contact-btn', 'fade', false, 0.6],                        // the Contact us button fades in
+
+    /* --- Home page --- */
+    ['.values', 'rise'],                                         // the big teal sentence
+    ['.hero h2', 'rise'],                                        // the headline
+    ['.testimonial', 'left'],                                    // the testimonial slides in from the left
+    ['.hero .btn', 'rise'],                                      // the "More stories" button
+    ['.video-frame', 'pop'],                                     // the video pops up
+    ['.split:not(.reverse) .media-box', 'left'],                 // Problem: picture from the left
+    ['.split:not(.reverse) .split-text', 'right'],               // Problem: text from the right
+    ['.split.reverse .media-box', 'right'],                      // Solution: picture from the right
+    ['.split.reverse .split-text', 'left'],                      // Solution: text from the left
+    ['.faq details', 'rise', true],                              // FAQ questions, one after another
+    ['.cta-box', 'pop'],                                         // the call-to-action box pops up
+    ['.or', 'spin', false, 0.4],                                 // the circled "or" spins in
+    ['.water-band p', 'rise', true],                             // the two lines in the water band
+
+    /* --- Headings of sections (every <h2> that sits directly in a section and has no class) --- */
+    ['section > h2:not([class])', 'rise'],
+
+    /* --- Why Neptune page (the three pillars have their own slide-in in section 2) --- */
+    ['.pillar .big-c', 'pop', false, 0.3],                       // the coloured C pops as each box arrives
+    ['.learn-band h2', 'rise'],
+    ['.learn-band .btn', 'rise', true],
+    ['.carousel', 'pop'],                                        // both carousels
+    ['.quote > *', 'rise', true],                                // "Request a quote" and "Want to find out more?" blocks
+
+    /* --- Features page --- */
+    ['.feature', 'rise'],                                        // each big box rises
+    ['.feature:not(.reverse) .feature-text', 'left'],            // text and picture arrive from opposite sides
+    ['.feature:not(.reverse) .media-box', 'right'],
+    ['.feature.reverse .feature-text', 'right'],
+    ['.feature.reverse .media-box', 'left'],
+
+    /* --- Our team page --- */
+    ['.team-title', 'rise'],                                     // the big headings (their underline is drawn by style.css)
+    ['.person', 'pop', true],                                    // the four person bubbles pop up one after another
+    ['.team-bubble', 'rise'],
+
+    /* --- Contact page --- */
+    ['.contact-details', 'left'],
+    ['.contact-form label, .contact-form .btn', 'rise', true],   // form fields rise one after another
+
+    /* --- Footer (on every page) --- */
+    ['.footer-left, .footer-menu, .footer-address', 'rise', true],
+    ['.footer-bottom p', 'fade']
+  ];
+
+  /* Visitors who asked for less motion get no animation at all. Leaving the
+     function here means nothing is hidden and nothing moves. */
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  /* ------------------------------------------------------------------------
+     Step 1: tag the chosen elements.
+     ------------------------------------------------------------------------
+     For each line in the list, document.querySelectorAll(selector) finds all
+     the matching elements. "forEach" runs a function on each, like a Python
+     "for el in elements:" loop.
+
+     A Map is like a Python dict. "counts" remembers, for each parent
+     element, how many matches inside it have been seen so far, so that the
+     stagger delay can be worked out (0 s, 0.1 s, 0.2 s, ...). It is capped at
+     0.5 s so a long list does not make the last item wait too long.
+     ------------------------------------------------------------------------ */
+  ANIMATIONS.forEach(function (rule) {
+    var selector = rule[0], effect = rule[1], stagger = rule[2], extra = rule[3] || 0;
+    var counts = new Map();
+
+    document.querySelectorAll(selector).forEach(function (el) {
+      if (el.classList.contains('anim')) return;       // already animated by an earlier line, leave it alone
+
+      /* The special effect "letters": split the word into one <span> per
+         letter, and give each its own small delay so they appear in a wave.
+         The original text is kept as aria-label so screen readers still read
+         "NEPTUNE" as one word, and each letter is hidden from them. */
+      if (effect === 'letters') {
+        var word = el.textContent.trim();
+        el.setAttribute('aria-label', word);
+        el.textContent = '';
+        word.split('').forEach(function (ch, i) {
+          var s = document.createElement('span');
+          s.className = 'letter anim anim-rise';
+          s.setAttribute('aria-hidden', 'true');
+          s.style.setProperty('--delay', (0.1 + i * 0.08) + 's');
+          s.textContent = ch;
+          el.appendChild(s);
+        });
+        return;
+      }
+
+      var n = 0;
+      if (stagger) {
+        n = counts.get(el.parentNode) || 0;            // how many siblings came before this one
+        counts.set(el.parentNode, n + 1);
+      }
+      el.classList.add('anim', 'anim-' + effect);
+      el.style.setProperty('--delay', (extra + Math.min(n * 0.1, 0.5)) + 's');
+    });
+  });
+
+  /* ------------------------------------------------------------------------
+     Step 2: watch them, and play each one the first time it comes into view.
+     ------------------------------------------------------------------------
+     The same IntersectionObserver idea as section 2: the browser tells us
+     when an element enters the visible part of the window. We then add the
+     class "in-view", which style.css turns into the animation, and stop
+     watching, so it plays once only. "threshold: 0.1" means an element counts as
+     in view once 10% of it is showing. If a browser has no
+     IntersectionObserver, everything is shown at once.
+     ------------------------------------------------------------------------ */
+  var targets = document.querySelectorAll('.anim');
+  if (!('IntersectionObserver' in window)) {
+    targets.forEach(function (el) { el.classList.add('in-view'); });
+    return;
+  }
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  targets.forEach(function (el) { observer.observe(el); });
+})();
