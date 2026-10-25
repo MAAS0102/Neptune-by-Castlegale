@@ -18,6 +18,11 @@
   <meta property="og:description" content="Neptune is led by science and built by experience.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://neptune.castlegale.com/team.html">
+  <!-- The picture shown when the link is shared in WhatsApp, LinkedIn, Slack and similar apps. -->
+  <meta property="og:image" content="https://neptune.castlegale.com/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
 
   <link rel="icon" type="image/png" href="images/logo.png">
   <link rel="stylesheet" href="style.css">
@@ -98,6 +103,12 @@
     </ul>
   </nav>
 
+  <!-- The title strip under the header: the page name in big letters in this
+       page's own colour, a dash, and a short description in small white
+       text. The class "page-intro-teal" picks the colour (defined in
+       style.css). The thin line under it comes from the paragraph's border. -->
+  <p class="page-intro page-intro-teal"><span class="page-title">Our team</span> <span class="page-dash">&ndash;</span> <span class="page-desc">The people behind Neptune.</span></p>
+
   <!-- <main> wraps the content that is different on every page. -->
   <main>
 
@@ -116,6 +127,8 @@
          ==================================================================== -->
     <section>
       <h2 class="team-title">Led by Science</h2>
+      <!-- A small hint, since the text about each person is hidden until a bubble is hovered or tapped. style.css hides it on phones, where the text is always showing. -->
+      <p class="team-hint">Hover over (or tap) a photo to read more about each person.</p>
       <div class="team-grid">
         <article class="person" tabindex="0">
           <div class="person-main">

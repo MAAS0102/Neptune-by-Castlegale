@@ -71,6 +71,11 @@
   <meta property="og:description" content="See the flow, master the process.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://neptune.castlegale.com/">
+  <!-- The picture shown when the link is shared in WhatsApp, LinkedIn, Slack and similar apps. -->
+  <meta property="og:image" content="https://neptune.castlegale.com/images/og.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
 
   <!-- The favicon is the tiny icon shown on the browser tab. rel="icon" says
        that is what this file is for, and href points to the image. The
@@ -186,7 +191,10 @@
              for" is a line break, so those two words sit alone on the first
              line. &amp; displays as "&", which has to be written this way
              because a bare & has a special meaning in HTML. -->
-        <h2>Built for<br><span class="accent keep-together">68.4% faster*</span> operations &amp; <span class="keep-together">zero-stress</span> <span class="magenta keep-together">EPA compliance</span></h2>
+        <!-- The number 68.4 is wrapped in a <span class="count-up">. script.js
+             counts it up from 0 to the value in data-to when the headline
+             appears. Without JavaScript the plain text 68.4 is shown. -->
+        <h2>Built for<br><span class="accent keep-together"><span class="count-up" data-to="68.4">68.4</span>% faster*</span> operations &amp; <span class="keep-together">zero-stress</span> <span class="magenta keep-together">EPA compliance</span></h2>
 
         <!-- <blockquote> marks a quotation. &ldquo; and &rdquo; are the
              curly opening and closing quotation marks. <cite> holds the name
@@ -225,23 +233,24 @@
     </section>
 
     <!-- ====================================================================
-         PROBLEM: a picture on the left, text on the right. The id="problem"
+         PROBLEM: text on the left, a picture on the right. The id="problem"
          gives this section a name that a link such as href="#problem" could
          jump to. class="split" tells CSS to lay it out in two columns.
          ==================================================================== -->
     <section class="split" id="problem">
-      <!-- Placeholder box standing in for the spreadsheet photo. -->
-      <div class="media-box"><p>Image: messy spreadsheets / paper reports</p></div>
       <div class="split-text">
         <h2>The Problem</h2>
         <p>WWTPs still rely on spreadsheets and email. A lack of information control leads to unexpected fines, site issues and wasteful management.</p>
       </div>
+      <!-- Placeholder box standing in for the spreadsheet photo. -->
+      <div class="media-box"><p>Image: messy spreadsheets / paper reports</p></div>
     </section>
 
     <!-- ====================================================================
          SOLUTION: the same layout, mirrored. The extra class "reverse" is
-         what lets CSS swap the order, so the picture sits on the other side.
-         In this HTML the text comes first and the image second.
+         what lets CSS swap the order, so the picture sits on the left here
+         while it sits on the right in the Problem section above. In this
+         HTML the text comes first and the image second.
          ==================================================================== -->
     <section class="split reverse" id="solution">
       <div class="split-text">
@@ -299,7 +308,6 @@
          ==================================================================== -->
     <section class="water-band">
       <!-- TODO: add water background image, e.g. style="background-image:url(images/water.jpg)" -->
-      <p>NEPTUNE: a centralised waste water treatment plant management platform</p>
       <p class="slogan">See the flow, master the process.</p>
     </section>
   </main>

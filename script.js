@@ -306,6 +306,11 @@
     window.location.href = 'mailto:info@castlegale.com' +
       '?subject=' + encodeURIComponent(subject) +
       '&body=' + encodeURIComponent(body);
+
+    /* Show the thank-you note under the button. Removing the "hidden"
+       attribute (setting .hidden to false) makes it visible. */
+    var note = document.getElementById('formNote');
+    if (note) note.hidden = false;
   });
 })();
 
@@ -345,6 +350,7 @@
     ['.site-header .logo', 'drop'],                              // the logo drops in
     ['.wordmark a', 'letters'],                                  // NEPTUNE (the link inside the heading) appears one letter at a time (special effect, see below)
     ['.tagline', 'rise', false, 0.7],                            // "Your Plant, Your Way." rises after the letters
+    ['.page-intro', 'rise'],                                     // the title strip on the extra pages
     ['.menu-btn', 'fade', false, 0.5],                           // the MENU button fades in
     ['.contact-btn', 'fade', false, 0.6],                        // the Contact us button fades in
 
@@ -354,10 +360,10 @@
     ['.testimonial', 'left'],                                    // the testimonial slides in from the left
     ['.hero .btn', 'rise'],                                      // the "More stories" button
     ['.video-frame', 'pop'],                                     // the video pops up
-    ['.split:not(.reverse) .media-box', 'left'],                 // Problem: picture from the left
-    ['.split:not(.reverse) .split-text', 'right'],               // Problem: text from the right
-    ['.split.reverse .media-box', 'right'],                      // Solution: picture from the right
-    ['.split.reverse .split-text', 'left'],                      // Solution: text from the left
+    ['.split:not(.reverse) .split-text', 'left'],                // Problem: text from the left
+    ['.split:not(.reverse) .media-box', 'right'],                // Problem: picture from the right
+    ['.split.reverse .media-box', 'left'],                       // Solution: picture from the left
+    ['.split.reverse .split-text', 'right'],                     // Solution: text from the right
     ['.faq details', 'rise', true],                              // FAQ questions, one after another
     ['.cta-box', 'pop'],                                         // the call-to-action box pops up
     ['.or', 'spin', false, 0.4],                                 // the circled "or" spins in
@@ -382,6 +388,7 @@
 
     /* --- Our team page --- */
     ['.team-title', 'rise'],                                     // the big headings (their underline is drawn by style.css)
+    ['.team-hint', 'fade'],                                      // the small hint under "Led by Science"
     ['.person', 'pop', true],                                    // the four person bubbles pop up one after another
     ['.team-bubble', 'rise'],
 
@@ -471,4 +478,105 @@
   }, { threshold: 0.1 });
 
   targets.forEach(function (el) { observer.observe(el); });
+})();
+
+
+
+/* --------------------------------------------------------------------------
+   6. Marking the current page in the menus
+   --------------------------------------------------------------------------
+   location.pathname is the path part of the address in the browser, for
+   example "/team.html". .split('/') cuts it into pieces at each slash (like
+   Python's str.split) and .pop() takes the last piece, the file name. If the
+   path ends in a slash the last piece is empty, which means the home page,
+   so "||" ("or") falls back to 'index.html'.
+
+   Then every link in the two menus is checked: if the file name in its href
+   (the part before any "#") matches this page, the link gets
+   aria-current="page". style.css lights up links that have it. To remove
+   this feature, delete this section 6 and the "aria-current" block in
+   style.css.
+   -------------------------------------------------------------------------- */
+(function () {
+  var here = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.menu-overlay a, .footer-menu a').forEach(function (a) {
+    var target = (a.getAttribute('href') || '').split('#')[0];
+    if (target === here) a.setAttribute('aria-current', 'page');
+  });
+})();
+
+
+/* --------------------------------------------------------------------------
+   7. The number that counts up ("68.4%" in the home page headline)
+   --------------------------------------------------------------------------
+   The HTML holds <span class="count-up" data-to="68.4">68.4</span>. When it
+   scrolls into view this code counts from 0 up to the value in data-to over
+   1.6 seconds. .dataset.to reads the data-to attribute. toFixed(1) rounds
+   to one decimal place, like Python's f"{x:.1f}".
+
+   The speed follows an "ease-out" curve (1 - (1 - t) cubed): quick at the
+   start, slowing as it nears the final number. requestAnimationFrame calls
+   the function before every screen redraw, and "t" is how far through the
+   1.6 seconds we are, from 0 to 1. Visitors with reduced motion see the
+   final number straight away. To remove this effect, delete this section 7.
+   -------------------------------------------------------------------------- */
+(function () {
+  var items = document.querySelectorAll('.count-up');
+  if (!items.length) return;
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!('IntersectionObserver' in window)) return;
+
+  function run(el) {
+    var target = parseFloat(el.dataset.to);
+    var start = null;
+    var duration = 1600;                           // milliseconds
+    el.textContent = (0).toFixed(1);
+    function step(now) {
+      if (start === null) start = now;
+      var t = Math.min(1, (now - start) / duration);
+      var eased = 1 - Math.pow(1 - t, 3);
+      el.textContent = (target * eased).toFixed(1);
+      if (t < 1) window.requestAnimationFrame(step);
+    }
+    window.requestAnimationFrame(step);
+  }
+
+  var observer = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        observer.unobserve(entry.target);
+        setTimeout(function () { run(entry.target); }, 400);   // wait for the headline to finish rising
+      }
+    });
+  }, { threshold: 0.5 });
+  items.forEach(function (el) { observer.observe(el); });
+})();
+
+
+/* --------------------------------------------------------------------------
+   8. Back to top button
+   --------------------------------------------------------------------------
+   document.createElement('button') makes a new button that is not on the page
+   yet, and document.body.appendChild(...) adds it at the end of the page.
+   Once the visitor has scrolled more than 600 pixels (window.scrollY) it gets
+   the class "show", which style.css turns into a fade-in. Clicking it scrolls
+   smoothly back to the top. To remove it, delete this section 8 and the
+   ".back-to-top" block in style.css.
+   -------------------------------------------------------------------------- */
+(function () {
+  var btn = document.createElement('button');
+  btn.className = 'back-to-top';
+  btn.type = 'button';
+  btn.setAttribute('aria-label', 'Back to top');
+  btn.innerHTML = '&uarr;';                         // &uarr; is an up arrow
+  document.body.appendChild(btn);
+
+  var calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: calm ? 'auto' : 'smooth' });
+  });
+
+  function check() { btn.classList.toggle('show', window.scrollY > 600); }
+  window.addEventListener('scroll', check, { passive: true });
+  check();
 })();
