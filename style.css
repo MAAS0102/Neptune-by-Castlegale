@@ -1227,3 +1227,34 @@ main { overflow-x: clip; }
   .split.reverse .split-text { order: 0; }    /* reset the swap, so text comes before the image like everywhere else */
   .or { margin: 0 auto; }                     /* centre the "or" circle */
 }
+
+
+/* ==========================================================================
+   9. FOOTER ON SMALLER SCREENS
+   ==========================================================================
+   Below 900px wide the three footer columns no longer fit side by side, so
+   they stack into one centred column. The order, top to bottom, is: contact
+   details, menu, address, and last of all the logo, which closes the footer
+   at the bottom.
+
+   The logo and the contact details are both inside one wrapper
+   (".footer-left"), so they cannot be reordered separately. The rule
+   "display: contents" makes the wrapper disappear as a box while keeping its
+   children, so the logo and the contact details become direct items of the
+   footer grid, like the menu and the address. Grid items can be put in any
+   order with "order": lower numbers come first, so the contact details get 1,
+   the menu 2, the address 3 and the logo 4, which puts the logo last.
+   ========================================================================== */
+@media (max-width: 900px) {
+  .footer-grid {
+    grid-template-columns: 1fr;       /* a single column */
+    justify-items: center;            /* centre every item horizontally */
+    text-align: center;               /* and centre the lines of text inside them */
+    gap: 28px;
+  }
+  .footer-left { display: contents; }
+  .footer-contact { order: 1; }
+  .footer-menu { order: 2; text-align: center; }
+  .footer-address { order: 3; justify-self: center; }
+  .footer-brand { order: 4; }
+}
