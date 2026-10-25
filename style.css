@@ -144,7 +144,7 @@ h1, h2, h3 {
 a { color: inherit; }
 
 /* A small reusable class. Any element with class="accent" (such as the span
-   around "68.4% faster*") gets the teal highlight colour. */
+   around "68.3% faster*") gets the teal highlight colour. */
 .accent { color: var(--accent); }
 
 /* Same idea for the magenta words ("EPA compliance" in the headline). */
@@ -657,7 +657,11 @@ main section {
 /* The bottom strip: it keeps the normal page colour. */
 .footer-bottom { padding: 24px 16px; }
 .copyright { text-align: center; margin: 0 0 .4em; color: var(--muted); }
-.footnote { text-align: center; font-size: .625rem; margin: 0; color: var(--muted); }   /* .625rem is 10px, much smaller than the 12.8px it was */
+/* The row holding the "More stories" button and the footnote. "flex" puts them
+   side by side, "align-items: center" lines their middles up, and "flex-wrap"
+   lets the footnote drop below the button on a narrow screen. */
+.hero-actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 16px; }
+.footnote { font-size: .625rem; margin: 0; color: var(--muted); }   /* .625rem is 10px, very small */
 
 
 /* ==========================================================================

@@ -182,7 +182,7 @@
     <section class="hero">
       <div class="hero-text">
         <!-- <h2> is a second-level heading. Two pieces of it are wrapped in a
-             <span> so CSS can colour just that part: "68.4% faster*" has
+             <span> so CSS can colour just that part: "68.3% faster*" has
              class="accent" (teal) and "EPA compliance" has class="magenta".
              Both also have the class "keep-together", which tells CSS never
              to split that phrase across two lines, and so does "zero-stress"
@@ -191,10 +191,10 @@
              for" is a line break, so those two words sit alone on the first
              line. &amp; displays as "&", which has to be written this way
              because a bare & has a special meaning in HTML. -->
-        <!-- The number 68.4 is wrapped in a <span class="count-up">. script.js
+        <!-- The number 68.3 is wrapped in a <span class="count-up">. script.js
              counts it up from 0 to the value in data-to when the headline
-             appears. Without JavaScript the plain text 68.4 is shown. -->
-        <h2>Built for<br><span class="accent keep-together"><span class="count-up" data-to="68.4">68.4</span>% faster*</span> operations &amp; <span class="keep-together">zero-stress</span> <span class="magenta keep-together">EPA compliance</span></h2>
+             appears. Without JavaScript the plain text 68.3 is shown. -->
+        <h2>Built for<br><span class="accent keep-together"><span class="count-up" data-to="68.3">68.3</span>% faster*</span> operations &amp; <span class="keep-together">zero-stress</span> <span class="magenta keep-together">EPA compliance</span></h2>
 
         <!-- <blockquote> marks a quotation. &ldquo; and &rdquo; are the
              curly opening and closing quotation marks. <cite> holds the name
@@ -209,7 +209,12 @@
              page. "why-neptune.html#case-studies" means the page
              why-neptune.html, scrolled to the element with id="case-studies".
              The part after the # is called an anchor. -->
-        <a class="btn btn-outline" href="why-neptune.html#case-studies">More stories</a>
+        <!-- The button and the very small footnote for the asterisk in the
+             headline sit side by side in one row (class "hero-actions"). -->
+        <div class="hero-actions">
+          <a class="btn btn-outline" href="why-neptune.html#case-studies">More stories</a>
+          <p class="footnote">* Data Collected Anonymously from Current Clients</p>
+        </div>
       </div>
 
       <div class="hero-video">
@@ -388,7 +393,6 @@
     <!-- Part 2: the bottom strip. &copy; displays as the copyright symbol. -->
     <div class="footer-bottom">
       <p class="copyright">&copy; 2026 Neptune by Castlegale</p>
-      <p class="footnote">* Data Collected Anonymously from Current Clients</p>
     </div>
   </footer>
 

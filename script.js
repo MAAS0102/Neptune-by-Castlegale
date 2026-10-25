@@ -358,7 +358,8 @@
     ['.values', 'rise'],                                         // the big teal sentence
     ['.hero h2', 'rise'],                                        // the headline
     ['.testimonial', 'left'],                                    // the testimonial slides in from the left
-    ['.hero .btn', 'rise'],                                      // the "More stories" button
+    ['.hero .btn', 'rise'],
+    ['.footnote', 'fade', false, 0.3],                           // the small footnote beside the button                                      // the "More stories" button
     ['.video-frame', 'pop'],                                     // the video pops up
     ['.split:not(.reverse) .split-text', 'left'],                // Problem: text from the left
     ['.split:not(.reverse) .media-box', 'right'],                // Problem: picture from the right
@@ -507,9 +508,9 @@
 
 
 /* --------------------------------------------------------------------------
-   7. The number that counts up ("68.4%" in the home page headline)
+   7. The number that counts up ("68.3%" in the home page headline)
    --------------------------------------------------------------------------
-   The HTML holds <span class="count-up" data-to="68.4">68.4</span>. When it
+   The HTML holds <span class="count-up" data-to="68.3">68.3</span>. When it
    scrolls into view this code counts from 0 up to the value in data-to over
    1.6 seconds. .dataset.to reads the data-to attribute. toFixed(1) rounds
    to one decimal place, like Python's f"{x:.1f}".
