@@ -389,8 +389,7 @@
 
     /* --- Our team page --- */
     ['.team-title', 'rise'],                                     // the big headings (their underline is drawn by style.css)
-    ['.team-hint', 'fade'],                                      // the small hint under "Led by Science"
-    ['.person', 'pop', true],                                    // the four person bubbles pop up one after another
+    ['.team-card', 'pop', true],                                  // the four team cards pop up one after another
     ['.team-bubble', 'rise'],
 
     /* --- Contact page --- */

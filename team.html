@@ -114,54 +114,84 @@
 
     <!-- ====================================================================
          LED BY SCIENCE / BUILT BY EXPERIENCE. The two big underlined
-         headings hug the grid of four people between them: the first sits
-         above the grid on the left, the second below it on the right.
-         Each person is an <article class="person">. It starts as a narrow
-         bubble showing the name, a photo space and the qualification
-         (class "person-main"), next to a hidden text part (class
-         "person-text"). When the mouse is over the bubble, or it is tapped,
-         or selected with the keyboard (tabindex="0" is what allows a tap or
-         keyboard selection), style.css makes it grow sideways and reveals
-         the text. The 1st and 3rd bubbles grow to the left and the 2nd and
-         4th to the right, so the photos stay near the middle of the page.
+         headings hug the cards between them: the first sits above on the
+         left, the second below on the right.
+
+         The cards come in two rows of two ("team-row"). Each card
+         ("team-card") has a profile on the left (name, photo, degree) and a
+         bio on the right. On wide screens the bio is hidden until the card is
+         pointed at, when the card grows and pushes its neighbour smaller.
+         tabindex="0" lets a card be selected with a tap or the keyboard,
+         which does the same as hovering. On narrow screens the cards stack
+         and the bios are always showing. All of this is in style.css.
          ==================================================================== -->
     <section>
       <h2 class="team-title">Led by Science</h2>
-      <!-- A small hint, since the text about each person is hidden until a bubble is hovered or tapped. style.css hides it on phones, where the text is always showing. -->
-      <p class="team-hint">Hover over (or tap) a photo to read more about each person.</p>
       <div class="team-grid">
-        <article class="person" tabindex="0">
-          <div class="person-main">
-            <h3>Finbarr Pyne</h3>
-            <div class="person-photo">Photo</div>
-            <p class="qualification">BSc Chemistry</p>
+        <div class="team-row">
+        <article class="team-card" tabindex="0">
+          <div class="card-profile">
+            <h3 class="member-name">Finbarr Pyne</h3>
+            <div class="photo-wrapper">
+              <div class="photo-circle">Photo</div>
+              <span class="plus-badge" aria-hidden="true">+</span>
+            </div>
+            <p class="member-degree">BSc Chemistry</p>
           </div>
-          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
-        </article>
-        <article class="person" tabindex="0">
-          <div class="person-main">
-            <h3>Declan Costigan</h3>
-            <div class="person-photo">Photo</div>
-            <p class="qualification">Postgraduate Environmental Science</p>
+          <div class="card-bio">
+            <span class="bio-label">ROLE / FOCUS</span>
+            <p>Short bio goes here.</p>
           </div>
-          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
+          <p class="card-hint" aria-hidden="true">Hover or tap to read more</p>
         </article>
-        <article class="person" tabindex="0">
-          <div class="person-main">
-            <h3>Matylda Supernak</h3>
-            <div class="person-photo">Photo</div>
-            <p class="qualification">BSc Physics</p>
+        <article class="team-card" tabindex="0">
+          <div class="card-profile">
+            <h3 class="member-name">Declan Costigan</h3>
+            <div class="photo-wrapper">
+              <div class="photo-circle">Photo</div>
+              <span class="plus-badge" aria-hidden="true">+</span>
+            </div>
+            <p class="member-degree">Postgraduate Environmental Science</p>
           </div>
-          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
-        </article>
-        <article class="person" tabindex="0">
-          <div class="person-main">
-            <h3>Tom Hurley</h3>
-            <div class="person-photo">Photo</div>
-            <p class="qualification">MSc, BSc Biochemistry</p>
+          <div class="card-bio">
+            <span class="bio-label">ROLE / FOCUS</span>
+            <p>Short bio goes here.</p>
           </div>
-          <div class="person-text"><p>Text space: a short bio goes here.</p></div>
+          <p class="card-hint" aria-hidden="true">Hover or tap to read more</p>
         </article>
+        </div>
+        <div class="team-row">
+        <article class="team-card" tabindex="0">
+          <div class="card-profile">
+            <h3 class="member-name">Matylda Supernak</h3>
+            <div class="photo-wrapper">
+              <div class="photo-circle">Photo</div>
+              <span class="plus-badge" aria-hidden="true">+</span>
+            </div>
+            <p class="member-degree">BSc Physics</p>
+          </div>
+          <div class="card-bio">
+            <span class="bio-label">ROLE / FOCUS</span>
+            <p>Short bio goes here.</p>
+          </div>
+          <p class="card-hint" aria-hidden="true">Hover or tap to read more</p>
+        </article>
+        <article class="team-card" tabindex="0">
+          <div class="card-profile">
+            <h3 class="member-name">Tom Hurley</h3>
+            <div class="photo-wrapper">
+              <div class="photo-circle">Photo</div>
+              <span class="plus-badge" aria-hidden="true">+</span>
+            </div>
+            <p class="member-degree">MSc, BSc Biochemistry</p>
+          </div>
+          <div class="card-bio">
+            <span class="bio-label">ROLE / FOCUS</span>
+            <p>Short bio goes here.</p>
+          </div>
+          <p class="card-hint" aria-hidden="true">Hover or tap to read more</p>
+        </article>
+        </div>
       </div>
       <h2 class="team-title team-title-right">Built by Experience</h2>
     </section>

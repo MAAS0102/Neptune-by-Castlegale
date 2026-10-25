@@ -840,61 +840,40 @@ main { overflow-x: clip; }
 /* "Built by Experience" is pushed to the right-hand side. */
 .team-title-right { margin: 24px 0 0; text-align: right; }
 
-/* The four people sit in a grid of two columns and two rows. The two heading
-   lines above and below it "hug" the grid between them. */
-.team-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+/* The four people: two rows of two cards. The cards are built mobile-first.
+   The rules directly below are the narrow-screen layout (under 1001px wide):
+   every card is full width, the profile on top and the bio always showing
+   underneath, with no hovering needed. The wide-screen layout, with the
+   hover animation, is in the "@media (min-width: 1001px)" block after them. */
+.team-grid { display: flex; flex-direction: column; gap: 24px; }
+.team-row { display: grid; grid-template-columns: 1fr; gap: 24px; }
 
-/* One person's bubble. At rest it is a narrow box (280px) holding just the
-   name, the photo and the qualification. Hovering over it (or tapping it, or
-   selecting it with the keyboard, which ":focus" handles) makes it grow
-   sideways until it fills its grid cell, which uncovers the text about the
-   person in the new part. "overflow: hidden" hides the part of the bubble
-   that is still outside the box while it is growing, and "transition"
-   animates the width change over half a second. */
-.person {
+.team-card {
+  position: relative;          /* lets the hint text be positioned inside the card */
   display: flex;
-  width: 280px;
-  height: 320px;
+  flex-direction: column;
+  min-width: 0;                /* grid items refuse to shrink below their content unless told otherwise; this lets the card get narrower when its row is re-balanced */
   overflow: hidden;
   border: 1px solid var(--line);
-  border-radius: 48px;
+  border-radius: 36px;
   background: var(--bg-alt);
-  transition: width .5s ease, background .5s ease;
-  cursor: pointer;
+  transition: opacity .4s ease, border-color .4s ease;
 }
-
-/* The bubbles in the first column (the 1st and 3rd person, "odd" ones) sit
-   against the right-hand edge of their cell, which is the centre of the
-   page, and their text part goes on the LEFT, so they grow towards the left.
-   "row-reverse" lays a flex row out right to left. "justify-self: end" pins
-   the bubble to the end (right) of its grid cell. The second column (the
-   "even" bubbles) does the opposite: pinned to the left edge of its cell,
-   which is also the centre of the page, growing to the right. Either way the
-   photos stay in the middle of the page and only the far side moves. */
-.person:nth-child(odd) { justify-self: end; flex-direction: row-reverse; }
-.person:nth-child(even) { justify-self: start; }
-
-/* On hover, focus, or tap, grow to the full width of the grid cell and
-   lighten the background a little. */
-.person:hover, .person:focus { width: 100%; background: var(--footer-bg); }
-
-/* The fixed part: name above, photo in the middle, qualification below.
-   "flex: 0 0 278px" means do not grow, do not shrink, and always be 278px
-   wide. "justify-content: space-between" spreads the three things from the
-   top to the bottom of the box. */
-.person-main {
-  flex: 0 0 278px;
+.card-profile {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px;
+  gap: 16px;
+  padding: 24px;
   text-align: center;
 }
-.person-main h3 { margin: 0; font-size: 1.25rem; }
+.member-name { margin: 0; font-size: 1.25rem; }
+.member-degree { margin: 0; color: var(--accent); font-weight: 600; }
 
-/* The photo space is a circle: border-radius 50% turns a square into one. */
-.person-photo {
+/* The photo with its "+" badge pinned to the lower right corner. The photo
+   is a circle (border-radius 50% turns a square into one). */
+.photo-wrapper { position: relative; }
+.photo-circle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -904,24 +883,117 @@ main { overflow-x: clip; }
   border-radius: 50%;
   background: var(--bg);
   color: var(--muted);
+  transition: border-color .4s ease, box-shadow .4s ease;
 }
-/* min-height reserves room for two lines, so every photo sits at the same height even when one qualification wraps onto a second line. */
-.qualification { margin: 0; min-height: 2.8em; color: var(--accent); font-weight: 600; }
-
-/* The part that is revealed: it takes up all the remaining width. It starts
-   invisible ("opacity: 0") and fades in a moment after the bubble starts to
-   grow ("transition-delay"), so the text does not appear squashed. */
-.person-text {
-  flex: 1 1 auto;
-  min-width: 260px;            /* keeps the text from being squeezed while the bubble is still narrow */
-  display: flex;
+.plus-badge {
+  position: absolute;
+  right: -4px;
+  bottom: -4px;
+  width: 32px;
+  height: 32px;
+  display: none;               /* hidden on narrow screens, where the bio is always showing */
   align-items: center;
-  padding: 32px;
-  opacity: 0;
-  transition: opacity .3s ease;
+  justify-content: center;
+  border-radius: 50%;
+  background: var(--accent);
+  color: var(--bg);
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1;
+  transition: transform .4s ease;
 }
-.person-text p { margin: 0; color: var(--muted); font-size: 1.1rem; }
-.person:hover .person-text, .person:focus .person-text { opacity: 1; transition-delay: .25s; }
+
+/* The bio, below the profile, with a thin line above it. */
+.card-bio { margin: 0 24px; padding: 16px 0 24px; border-top: 1px solid var(--line); }
+.bio-label { color: var(--accent); font-size: .75rem; letter-spacing: .12em; }
+.card-bio p { margin: .5em 0 0; color: var(--muted); font-size: 1.05rem; }
+.card-hint { display: none; }
+
+/* ---- Wide screens: the hover animation -----------------------------------
+   Only used when the window is 1001px wide or more, because it needs room.
+
+   1. Each row is a grid with two equal columns ("1fr 1fr"). Pointing at a
+      card (or selecting it with the keyboard or a tap, which ":focus-within"
+      detects) changes the row to "1.85fr .85fr", so the pointed-at card
+      takes most of the row and its neighbour is squeezed. "transition" on
+      "grid-template-columns" animates that change over 0.6 seconds.
+   2. ":has(...)" selects the ROW because of what it contains. "the row that
+      has the 1st card hovered" gets one ratio, and "the row that has the
+      2nd card hovered" gets the opposite ratio.
+   3. The card next to the active one in the same row is dimmed to 65%.
+   4. The active card's border lights up in the mint accent colour, the photo
+      ring glows, and the "+" badge turns 45 degrees into an "x".
+   5. The bio sits in a "drawer" on the right of the profile. It is
+      invisible and 8px lower at first, and fades up into place 0.1 seconds
+      after the card starts to open. The profile always stays on the left. */
+@media (min-width: 1001px) {
+  .team-row {
+    grid-template-columns: 1fr 1fr;
+    transition: grid-template-columns .6s ease;
+  }
+  .team-row:has(.team-card:nth-child(1):hover),
+  .team-row:has(.team-card:nth-child(1):focus-within) { grid-template-columns: 1.85fr .85fr; }
+  .team-row:has(.team-card:nth-child(2):hover),
+  .team-row:has(.team-card:nth-child(2):focus-within) { grid-template-columns: .85fr 1.85fr; }
+
+  .team-card {
+    flex-direction: row;       /* profile on the left, bio drawer on the right */
+    height: 340px;             /* a fixed height, so nothing below jumps while the cards change width */
+    border-radius: 48px;
+    cursor: pointer;
+  }
+  .card-profile {
+    flex: 0 0 280px;           /* always exactly 280px wide, on the left */
+    justify-content: space-between;
+    padding: 20px;
+  }
+  .member-degree { min-height: 2.8em; }   /* room for two lines, so every photo sits at the same height */
+  .plus-badge { display: flex; }
+
+  .card-bio {
+    flex: 1 1 0;               /* take all the remaining width */
+    min-width: 0;
+    margin: 32px 0;
+    padding: 0 28px;
+    border-top: 0;
+    border-left: 1px solid var(--line);   /* the thin vertical divider between profile and bio */
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity .4s ease, transform .4s ease;
+  }
+
+  /* The "Hover or tap to read more" hint. It sits in the empty space to the
+     right of the profile while the card is at rest, and disappears as soon
+     as anything in its row is being pointed at. */
+  .card-hint {
+    display: block;
+    position: absolute;
+    left: 300px;
+    right: 24px;
+    top: 50%;
+    margin: 0;
+    transform: translateY(-50%);
+    text-align: center;
+    color: var(--muted);
+    transition: opacity .3s ease;
+  }
+  .team-row:has(.team-card:hover) .card-hint,
+  .team-row:has(.team-card:focus-within) .card-hint { opacity: 0; }
+
+  /* Dim the neighbour in the same row. */
+  .team-row:has(.team-card:hover) .team-card:not(:hover),
+  .team-row:has(.team-card:focus-within) .team-card:not(:focus-within) { opacity: .65; }
+
+  /* The active card. */
+  .team-card:hover, .team-card:focus-within { border-color: var(--accent); }
+  .team-card:hover .photo-circle,
+  .team-card:focus-within .photo-circle { border-color: var(--accent); box-shadow: 0 0 18px rgba(47, 208, 196, .5); }
+  .team-card:hover .plus-badge,
+  .team-card:focus-within .plus-badge { transform: rotate(45deg) scale(1.1); }
+  .team-card:hover .card-bio,
+  .team-card:focus-within .card-bio { opacity: 1; transform: none; transition-delay: .1s; }
+}
 
 /* The big bubble under the "The Team" heading. */
 .team-bubble {
@@ -979,23 +1051,9 @@ main { overflow-x: clip; }
 /* ---- Smaller screens for the extra pages --------------------------------- */
 @media (max-width: 800px) {
   .pillar { width: 100%; }
-  .feature, .team-grid, .contact-layout { grid-template-columns: 1fr; }
+  .feature, .contact-layout { grid-template-columns: 1fr; }
   .feature.reverse .feature-text { order: 0; }
   .slide { padding: 24px; }
-  /* On a phone there is no room for a bubble to grow sideways, so every
-     person's bubble is full width, stacked top to bottom, with the text
-     always showing underneath the photo. */
-  .team-grid { grid-template-columns: 1fr; }
-  .person, .person:nth-child(odd), .person:nth-child(even) {
-    width: 100%;
-    height: auto;
-    flex-direction: column;
-    justify-self: stretch;
-  }
-  .person-main { flex: none; }
-  .person-main h3 { margin-bottom: 12px; }
-  .person-photo { margin-bottom: 12px; }
-  .person-text { opacity: 1; min-width: 0; padding: 0 24px 24px; }
   .team-title-right { text-align: left; }
   .team-bubble { padding: 28px; border-radius: 36px; }
 
@@ -1006,7 +1064,7 @@ main { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   .js .slide-in { opacity: 1; transform: none; }
   .slides { scroll-behavior: auto; }
-  .person, .person-text { transition: none; }
+  .team-row, .team-card, .card-bio, .photo-circle, .plus-badge { transition: none; }
 }
 
 
@@ -1281,37 +1339,6 @@ main { overflow-x: clip; }
   color: var(--hover);
   text-decoration: underline;
   text-underline-offset: 6px;
-}
-
-/* ---- Our team: the hint that the bubbles can be opened ------------------
-   A line of small text under the heading, and a small "+" badge on every
-   photo that turns into an "x" shape (rotates 45 degrees) when the bubble is
-   open. Both are hidden on phones, where all the text is already showing.
-   To remove the hint, delete this block and the <p class="team-hint"> line
-   in team.html. */
-.team-hint { margin: -8px 0 20px; color: var(--muted); }
-.person-photo { position: relative; }
-.person-photo::after {
-  content: "+";
-  position: absolute;
-  right: -4px;
-  bottom: -4px;
-  width: 32px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  background: var(--accent);
-  color: var(--bg);
-  font-size: 1.4rem;
-  font-weight: 700;
-  line-height: 1;
-  transition: transform .4s ease;
-}
-.person:hover .person-photo::after, .person:focus .person-photo::after { transform: rotate(45deg); }
-@media (max-width: 800px) {
-  .team-hint, .person-photo::after { display: none; }
 }
 
 /* ---- The number that counts up: digits all the same width, so the
