@@ -32,10 +32,13 @@
        ====================================================================== -->
   <header class="site-header">
 
-    <!-- <a> is a link. href is the destination. "/" means the site's home
-         page. aria-label gives screen readers a spoken name, because the
+    <!-- <a> is a link. href is the destination. "index.html" is the home
+         page file, so this link goes back to the home page (a bare "/" would
+         point at the root of the whole web address, which is not always where
+         this site lives, for example when a page is opened as a file or from
+         the GitHub address). aria-label gives screen readers a spoken name, because the
          link contains only a picture and no text. -->
-    <a class="brand" href="/" aria-label="Neptune by Castlegale home">
+    <a class="brand" href="index.html" aria-label="Neptune by Castlegale home">
       <!-- <img> shows a picture from an image file. It has no closing tag.
            src is the file's location: the "images" folder, then the file
            name. alt is the text a screen reader speaks, and what appears if
@@ -49,8 +52,9 @@
          used to group things so CSS can position them together. -->
     <div class="title-block">
       <!-- <h1> is the top-level heading. A page should have exactly one.
-           Heading tags run from h1 (most important) down to h6. -->
-      <h1 class="wordmark">NEPTUNE</h1>
+           Heading tags run from h1 (most important) down to h6. The word
+           NEPTUNE is wrapped in a link back to the home page. -->
+      <h1 class="wordmark"><a href="index.html">NEPTUNE</a></h1>
       <!-- <p> is a paragraph of text. -->
       <p class="tagline">Your Plant, Your Way.</p>
     </div>
@@ -86,7 +90,7 @@
     <!-- <ul> is an unordered list. Each <li> is one item in it. Here every
          item holds a link to one page of the site. -->
     <ul>
-      <li><a href="/">Home</a></li>
+      <li><a href="index.html">Home</a></li>
       <li><a href="why-neptune.html">Why Neptune?</a></li>
       <li><a href="features.html">Features</a></li>
       <li><a href="team.html">Our team</a></li>
@@ -210,7 +214,7 @@
         <nav class="footer-menu" aria-label="Footer menu">
           <h3>Menu</h3>
           <ul>
-            <li><a href="/">Home</a></li>
+            <li><a href="index.html">Home</a></li>
             <li><a href="why-neptune.html">Why Neptune?</a></li>
             <li><a href="features.html">Features</a></li>
             <li><a href="team.html">Our team</a></li>

@@ -213,6 +213,11 @@ a { color: inherit; }
   margin: 0;
 }
 
+/* The link around the word NEPTUNE keeps the heading's colour and loses the
+   default underline, so it looks exactly like plain text while still being
+   clickable. */
+.wordmark a { color: inherit; text-decoration: none; }
+
 .tagline { margin: 0; color: #ffffff; }   /* "Your Plant, Your Way." under NEPTUNE: plain white */
 
 /* The box holding the MENU button is the third grid item, so it sits in the
@@ -933,7 +938,10 @@ main { overflow-x: clip; }
 
 /* ---- Contact page -------------------------------------------------------- */
 .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
-.contact-details p { margin: .4em 0; }
+.contact-details { font-size: 1.15rem; line-height: 1.6; }
+/* Phone, email and address are spread well apart: every item gets 1.6em
+   (1.6 times the text size) of space below it. */
+.contact-details p, .contact-details address { margin: 0 0 1.6em; }
 .contact-details address { font-style: normal; }
 .contact-details a { text-underline-offset: 3px; }
 
@@ -1096,17 +1104,55 @@ main { overflow-x: clip; }
 
 
 /* --------------------------------------------------------------------------
-   ANIMATION: the water band slowly drifts, like moving water. The gradient
-   is made twice as tall as the band ("220%"), and the animation moves it up
-   and down forever ("infinite") and back again ("alternate") over 14 seconds.
-   To remove: delete this whole block. The band then goes back to its
-   original still gradient.
+   ANIMATION: waves in the water band. Two rows of waves, one in each of two
+   shades of teal, slide sideways in opposite directions at different speeds,
+   so the two colours keep mixing into each other like water.
+
+   Each wave is a small drawn picture (an SVG, the web's format for line
+   drawings) written directly into the CSS inside url("data:..."). It is one
+   wavy line with the area below it filled in, 1200px wide, and it is made
+   so that its right end joins its left end exactly. "repeat-x" tiles it
+   endlessly sideways. Moving "background-position" by exactly one tile (1200px)
+   in an animation therefore loops with no visible jump. "linear" keeps the
+   speed constant, and "infinite" repeats forever.
+
+   The waves are drawn by two extra pieces of content attached to the band
+   with "::before" and "::after". They sit behind the text ("z-index: 0"
+   against the text's "z-index: 1") and ignore the mouse.
+
+   To remove: delete this whole block. The band goes back to its plain still
+   gradient from the ".water-band" rule above.
    -------------------------------------------------------------------------- */
-.water-band { background-size: 100% 220%; animation: water-drift 14s ease-in-out infinite alternate; }
-@keyframes water-drift {
-  from { background-position: 50% 0%; }
-  to   { background-position: 50% 100%; }
+.water-band { position: relative; overflow: hidden; }
+.water-band::before,
+.water-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;                    /* stretch to all four edges of the band */
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: repeat-x;
+  background-size: 1200px 70%;     /* one tile: 1200px wide and 70% of the band's height. Sitting at the bottom, the filled area below each wave line reaches the bottom edge of the band, so no gap shows */
 }
+/* Back row: the lighter shade, taller, moving to the right. */
+.water-band::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'%3E%3Cpath fill='%230C556B' fill-opacity='.75' d='M0 75 Q150 5 300 75 T600 75 T900 75 T1200 75 V150 H0 Z'/%3E%3C/svg%3E");
+  background-size: 1200px 78%;
+  background-position: 0 100%;     /* 100% = stuck to the bottom of the band */
+  animation: waves-right 7s linear infinite;
+}
+/* Front row: the brighter shade, shorter, moving the other way and a
+   little slower, so the two rows keep crossing over each other. */
+.water-band::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 150' preserveAspectRatio='none'%3E%3Cpath fill='%23026274' fill-opacity='.65' d='M0 75 Q150 145 300 75 T600 75 T900 75 T1200 75 V150 H0 Z'/%3E%3C/svg%3E");
+  background-size: 1200px 52%;
+  background-position: 0 100%;
+  animation: waves-left 10s linear infinite;
+}
+@keyframes waves-right { to { background-position: 1200px 100%; } }
+@keyframes waves-left  { to { background-position: -1200px 100%; } }
+/* The text sits above the waves. */
+.water-band p { position: relative; z-index: 1; }
 
 
 /* --------------------------------------------------------------------------
@@ -1176,7 +1222,7 @@ main { overflow-x: clip; }
 @media (prefers-reduced-motion: reduce) {
   .js .anim { opacity: 1; }
   .js .anim.in-view, .menu-overlay:not([hidden]) li, .faq details[open] > p, .slide { animation: none; }
-  .water-band { animation: none; }
+  .water-band::before, .water-band::after { animation: none; }
   .js .team-title, .js .feature h2::after, .btn { transition: none; }
   .js .team-title { background-size: 100% .06em; }
   .js .feature h2::after { width: 80px; }

@@ -343,7 +343,7 @@
   var ANIMATIONS = [
     /* --- Header: plays as soon as the page loads --- */
     ['.site-header .logo', 'drop'],                              // the logo drops in
-    ['.wordmark', 'letters'],                                    // NEPTUNE appears one letter at a time (special effect, see below)
+    ['.wordmark a', 'letters'],                                  // NEPTUNE (the link inside the heading) appears one letter at a time (special effect, see below)
     ['.tagline', 'rise', false, 0.7],                            // "Your Plant, Your Way." rises after the letters
     ['.menu-btn', 'fade', false, 0.5],                           // the MENU button fades in
     ['.contact-btn', 'fade', false, 0.6],                        // the Contact us button fades in
