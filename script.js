@@ -397,7 +397,7 @@
     ['.contact-form label, .contact-form .btn', 'rise', true],   // form fields rise one after another
 
     /* --- Footer (on every page) --- */
-    ['.footer-left, .footer-menu, .footer-address', 'rise', true],
+    ['.footer-brand, .footer-contact, .footer-menu, .footer-address', 'rise', true],
     ['.footer-bottom p', 'fade']
   ];
 

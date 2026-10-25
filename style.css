@@ -53,6 +53,12 @@
    very dark navy.
    ========================================================================== */
 :root {
+  /* One "vw" is 1% of the window width. Because the whole page is scaled up
+     by the zoom set on <html> (see "PAGE SCALE" in section 2), a plain vw
+     would come out 25% too big, so every width-based size in this file uses
+     --vw instead, which is 1vw divided by the 1.25 zoom (1 / 1.25 = 0.8).
+     Write "calc(4 * var(--vw))" where you would normally write "4vw". */
+  --vw: 0.8vw;
   --bg: #013741;        /* page background: a deep teal-blue */
   --bg-alt: #026274;    /* slightly lighter navy, for boxes that sit on the page */
   --text: #e8f1f8;      /* main text colour: a soft off-white with a blue tint */
@@ -117,6 +123,20 @@
 /* "scroll-behavior: smooth" makes clicks on in-page links (like #faq)
    glide to the target instead of jumping. */
 html { scroll-behavior: smooth; }
+
+/* PAGE SCALE. "zoom: 1.25" makes the whole page 25% bigger: text, spacing,
+   pictures and layout widths, exactly like pressing Ctrl and + to zoom the
+   browser to 125%. It is applied once here, on the very top element, so every
+   other size in this file stays written at its normal "100%" value and is
+   multiplied by this number automatically. To make the whole site bigger or
+   smaller, change 1.25 (1 means no scaling, 1.1 means 10% bigger).
+
+   One thing to remember: media queries, the "@media (max-width: ...)" blocks
+   further down, measure the real window and ignore this zoom. Because the
+   page is 25% bigger, it runs out of room 25% sooner, so every breakpoint in
+   this file is the original width times 1.25 (800 became 1000, 900 became
+   1125 and 1001 became 1251). If you change the zoom, change those too. */
+html { zoom: 1.25; }
 
 /* <body> is everything visible on the page. */
 body {
@@ -196,7 +216,7 @@ a { color: inherit; }
   /* clamp(smallest, ideal, largest) again: the height is 14vw (14% of the
      window width) but never less than 120px or more than 170px, so the logo
      is large on a desktop and still sensible on a phone. */
-  height: clamp(120px, 14vw, 170px);
+  height: clamp(120px, calc(14 * var(--vw)), 170px);
   width: auto;                 /* ...and let the width follow automatically, so the picture keeps its true proportions and is not squashed */
   display: block;              /* an <img> is "inline" by default, like a letter in a line of text, which leaves a small gap underneath. "block" removes that gap, so centring is exact */
 }
@@ -208,7 +228,7 @@ a { color: inherit; }
      but is never below 2.4rem or above 5rem. "vw" is 1% of the browser
      window's width, so 8vw grows as the window widens. "rem" is relative to
      the page's base font size, usually 16px, so 5rem is 80px. */
-  font-size: clamp(2.4rem, 8vw, 5rem);
+  font-size: clamp(2.4rem, calc(8 * var(--vw)), 5rem);
   letter-spacing: .18em;       /* wide gaps between the letters of NEPTUNE */
   margin: 0;
 }
@@ -274,7 +294,7 @@ a { color: inherit; }
   font: inherit;               /* use the same font as the page, instead of the browser's default button font */
   font-weight: 700;            /* 700 is bold */
   letter-spacing: .08em;
-  font-size: clamp(1.2rem, 2.4vw, 1.9rem);   /* much larger than the page text, growing with the window between 1.2rem and 1.9rem */
+  font-size: clamp(1.2rem, calc(2.4 * var(--vw)), 1.9rem);   /* much larger than the page text, growing with the window between 1.2rem and 1.9rem */
   padding: 12px 16px;          /* extra space around the text makes a bigger area to click or tap */
 }
 
@@ -293,14 +313,14 @@ a { color: inherit; }
      window, and it stops growing at 2.05rem (32.8px) because the page
      content never gets wider than 1200px. "min" picks whichever of the two
      is smaller. */
-  font-size: min(2.05rem, 2.65vw);
+  font-size: min(2.05rem, calc(2.65 * var(--vw)));
   line-height: 1.25;
   white-space: nowrap;         /* never break the sentence: it always stays on one line */
 }
 
-/* On small screens, one line would be too tiny to read, so below 800px the
+/* On small screens, one line would be too tiny to read, so below 1000px the
    sentence is allowed to wrap onto two or three lines at a readable size. */
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .values {
     white-space: normal;
     font-size: 1.5rem;
@@ -343,7 +363,7 @@ a { color: inherit; }
   padding: 10px;
   text-decoration: none;
   text-transform: uppercase;
-  font-size: clamp(1.8rem, 6vw, 3.5rem);   /* big text that scales with the screen width */
+  font-size: clamp(1.8rem, calc(6 * var(--vw)), 3.5rem);   /* big text that scales with the screen width */
   font-weight: 700;
   letter-spacing: .06em;
 }
@@ -404,7 +424,7 @@ main section {
   border-top: 1px solid var(--line);  /* a thin divider line above the section */
 }
 
-.hero h2 { font-size: clamp(1.8rem, 4vw, 2.8rem); }
+.hero h2 { font-size: clamp(1.8rem, calc(4 * var(--vw)), 2.8rem); }
 
 /* A <blockquote> is the HTML tag for a quotation. */
 .testimonial {
@@ -558,7 +578,7 @@ main section {
 }
 
 .water-band .slogan {
-  font-size: clamp(1.4rem, 4vw, 2.4rem);
+  font-size: clamp(1.4rem, calc(4 * var(--vw)), 2.4rem);
   font-weight: 700;
   color: var(--accent);
   text-transform: uppercase;
@@ -622,7 +642,7 @@ main section {
    So it lands exactly halfway between the old size and the header size, and
    keeps that relationship as the window grows or shrinks. Width stays "auto"
    from the ".logo" rule, so only the height is given. */
-.footer-brand .logo { height: calc((110px + clamp(120px, 14vw, 170px)) / 2); }
+.footer-brand .logo { height: calc((110px + clamp(120px, calc(14 * var(--vw)), 170px)) / 2); }
 
 .footer-main h3 { font-size: 1rem; margin: 0 0 .8em; }
 
@@ -712,7 +732,7 @@ button.btn {
    stagger left and right down the page. */
 .pillar-right { margin-left: auto; }
 
-.pillar h2 { margin-top: 0; font-size: clamp(2rem, 6vw, 3.9rem); }   /* the whole word is big, the same size as its coloured first letter */
+.pillar h2 { margin-top: 0; font-size: clamp(2rem, calc(6 * var(--vw)), 3.9rem); }   /* the whole word is big, the same size as its coloured first letter */
 
 /* The first letter of each pillar's name is coloured and uses the bold Poppins
    font. It is the same size as the rest of the word. Each pillar sets its own
@@ -747,7 +767,7 @@ button.btn {
 .js .slide-in {
   --p: 0;
   opacity: var(--p);
-  transform: translateX(calc((1 - var(--p)) * var(--dir) * 70vw));
+  transform: translateX(calc((1 - var(--p)) * var(--dir) * calc(70 * var(--vw))));
 }
 
 /* The boxes start far off to the side, which could make the page scroll
@@ -761,7 +781,7 @@ main { overflow-x: clip; }
 
 /* ---- A band with a sentence and buttons --------------------------------- */
 .learn-band { border-top: 1px solid var(--line); text-align: center; }
-.learn-band h2 { max-width: 40rem; margin-left: auto; margin-right: auto; font-size: clamp(1.4rem, 3vw, 2rem); }
+.learn-band h2 { max-width: 40rem; margin-left: auto; margin-right: auto; font-size: clamp(1.4rem, calc(3 * var(--vw)), 2rem); }
 
 
 /* ---- Carousel: a row of slides that scrolls sideways ---------------------- */
@@ -830,7 +850,7 @@ main { overflow-x: clip; }
    with the heading). */
 .team-title {
   margin: 0 0 24px;
-  font-size: clamp(2.4rem, 6.5vw, 4.8rem);
+  font-size: clamp(2.4rem, calc(6.5 * var(--vw)), 4.8rem);
   line-height: 1.1;
   text-decoration: underline;
   text-decoration-color: var(--accent);
@@ -841,10 +861,10 @@ main { overflow-x: clip; }
 .team-title-right { margin: 24px 0 0; text-align: right; }
 
 /* The four people: two rows of two cards. The cards are built mobile-first.
-   The rules directly below are the narrow-screen layout (under 1001px wide):
+   The rules directly below are the narrow-screen layout (under 1251px wide):
    every card is full width, the profile on top and the bio always showing
    underneath, with no hovering needed. The wide-screen layout, with the
-   hover animation, is in the "@media (min-width: 1001px)" block after them. */
+   hover animation, is in the "@media (min-width: 1251px)" block after them. */
 .team-grid { display: flex; flex-direction: column; gap: 24px; }
 .team-row { display: grid; grid-template-columns: 1fr; gap: 24px; }
 
@@ -910,7 +930,7 @@ main { overflow-x: clip; }
 .card-hint { display: none; }
 
 /* ---- Wide screens: the hover animation -----------------------------------
-   Only used when the window is 1001px wide or more, because it needs room.
+   Only used when the window is 1251px wide or more (1000px of page once the 25% scale is counted), because it needs room.
 
    1. Each row is a grid with two equal columns ("1fr 1fr"). Pointing at a
       card (or selecting it with the keyboard or a tap, which ":focus-within"
@@ -926,7 +946,7 @@ main { overflow-x: clip; }
    5. The bio sits in a "drawer" on the right of the profile. It is
       invisible and 8px lower at first, and fades up into place 0.1 seconds
       after the card starts to open. The profile always stays on the left. */
-@media (min-width: 1001px) {
+@media (min-width: 1251px) {
   .team-row {
     grid-template-columns: 1fr 1fr;
     transition: grid-template-columns .6s ease;
@@ -1009,7 +1029,7 @@ main { overflow-x: clip; }
 
 /* ---- Request a quote ----------------------------------------------------- */
 .quote { border-top: 1px solid var(--line); text-align: center; }
-.quote h2 { font-size: clamp(2rem, 6vw, 4rem); letter-spacing: .06em; margin-bottom: 8px; }
+.quote h2 { font-size: clamp(2rem, calc(6 * var(--vw)), 4rem); letter-spacing: .06em; margin-bottom: 8px; }
 .quote p { color: var(--muted); }
 
 
@@ -1049,7 +1069,7 @@ main { overflow-x: clip; }
 
 
 /* ---- Smaller screens for the extra pages --------------------------------- */
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .pillar { width: 100%; }
   .feature, .contact-layout { grid-template-columns: 1fr; }
   .feature.reverse .feature-text { order: 0; }
@@ -1244,7 +1264,7 @@ main { overflow-x: clip; }
 /* "Built by Experience" sits on the right and its underline grows from the
    right-hand end. */
 .js .team-title-right { margin-left: auto; background-position: right bottom; }
-@media (max-width: 800px) { .js .team-title-right { margin-left: 0; } }
+@media (max-width: 1000px) { .js .team-title-right { margin-left: 0; } }
 
 
 /* --------------------------------------------------------------------------
@@ -1321,9 +1341,9 @@ main { overflow-x: clip; }
   color: var(--page-colour);
   font-family: "Poppins", system-ui, sans-serif;
   font-weight: 700;
-  font-size: clamp(2rem, 5vw, 3.6rem);
+  font-size: clamp(2rem, calc(5 * var(--vw)), 3.6rem);
 }
-.page-dash, .page-desc { color: #ffffff; font-size: clamp(1rem, 1.8vw, 1.3rem); }
+.page-dash, .page-desc { color: #ffffff; font-size: clamp(1rem, calc(1.8 * var(--vw)), 1.3rem); }
 .page-intro-yellow { --page-colour: var(--hover-yellow); }
 .page-intro-blue   { --page-colour: var(--hover-blue); }
 .page-intro-teal   { --page-colour: var(--hover-teal); }
@@ -1376,7 +1396,7 @@ main { overflow-x: clip; }
 /* ---- The "page not found" page (404.html) ------------------------------- */
 .notfound { padding-top: 64px; }
 .notfound-logo { margin: 0 auto 24px; }          /* "auto" left and right margins centre a block-level picture */
-.notfound-title { margin: 0; font-size: clamp(4rem, 14vw, 9rem); color: var(--accent); line-height: 1; }
+.notfound-title { margin: 0; font-size: clamp(4rem, calc(14 * var(--vw)), 9rem); color: var(--accent); line-height: 1; }
 
 
 /* ==========================================================================
@@ -1402,14 +1422,14 @@ main { overflow-x: clip; }
 /* ==========================================================================
    8. MOBILE LAYOUT
    ==========================================================================
-   "@media (max-width: 800px)" means: apply the rules inside only when the
-   browser window is 800 pixels wide or narrower, as on a phone. Rules inside
+   "@media (max-width: 1000px)" means: apply the rules inside only when the
+   browser window is 1000 pixels wide or narrower (800 pixels at normal scale, times the 1.25 page zoom), as on a phone. Rules inside
    replace the earlier desktop ones, because they come later in the file.
 
    Overall effect: every multi-column grid collapses into a single column,
    so everything stacks vertically.
    ========================================================================== */
-@media (max-width: 800px) {
+@media (max-width: 1000px) {
   .site-header { grid-template-columns: 1fr; text-align: center; justify-items: center; }
   /* Extra space above the stacked logo gives the Contact us button its own
      band along the top, so on a narrow phone it can never sit on top of the
@@ -1427,7 +1447,7 @@ main { overflow-x: clip; }
 /* ==========================================================================
    9. FOOTER ON SMALLER SCREENS
    ==========================================================================
-   Below 900px wide the three footer columns no longer fit side by side, so
+   Below 1125px wide the three footer columns no longer fit side by side, so
    they stack into one centred column. The order, top to bottom, is: contact
    details, menu, address, and last of all the logo, which closes the footer
    at the bottom.
@@ -1440,7 +1460,7 @@ main { overflow-x: clip; }
    order with "order": lower numbers come first, so the contact details get 1,
    the menu 2, the address 3 and the logo 4, which puts the logo last.
    ========================================================================== */
-@media (max-width: 900px) {
+@media (max-width: 1125px) {
   .footer-grid {
     grid-template-columns: 1fr;       /* a single column */
     justify-items: center;            /* centre every item horizontally */
